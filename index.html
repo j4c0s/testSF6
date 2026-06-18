@@ -344,12 +344,41 @@
         }
 
         .media-placeholder img {
-            max-width: 100%;
+            max-width: 280px;
             height: auto;
             border-radius: 10px;
             display: block;
             margin: 0 auto;
             box-shadow: var(--shadow);
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+        }
+
+        .media-placeholder img:hover {
+            transform: scale(1.02);
+        }
+
+        /* Overlay do powiększania zdjęć */
+        .zoom-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+            padding: 20px;
+        }
+
+        .zoom-overlay img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .media-caption {
@@ -395,7 +424,7 @@
     <div class="callout callout-info">
         <strong>💡 Jak działa automatyczny powrót i awaryjny reset?</strong><br>
         Użycie komendy <code>tempradio</code> sprawia, że nowe ustawienia są aplikowane w repeaterach wyłącznie na określony czas. Po upływie zaprogramowanych minut, repeatery <strong>samoistnie i bez Twojej pomocy powrócą do bazy (SF8/CR8)</strong>.<br><br>
-        <strong>Ważne:</strong> Gdyby coś poszło nie tak i nastąpiła utrata połączenia z węzłem, <strong>zresetowanie repeatera</strong> (odłączenie go od prądu/zasilania lub wysłanie zwykłej komendy CLI <code>reboot</code>) również natychmiast <strong>anuluje tryb tymczasowy i przywróci poprzednie, domyślne parametry radia</strong>.
+        <strong>Ważne:</strong> Gdyby coś poszło nie tak i nastąpiła utrata połączenia z węzłem, <strong>zresetowanie repeatera</strong> (odłączenie go od prądu/zasilania lub wysłanie zwykłej komendy CLI <code>reboot</code>) również natychmiast <strong>anuluje tryb tymczasowy i przywróci poprzednie, domyślne parametry radia</strong>. Jeżeli nie masz możliwości resetu, ani zalogowania, w najgorszym wypadku będziesz musiał poczekać do upłynięcia ustawionego czasu.
     </div>
 
     <!-- Reguła Kolejności -->
@@ -408,26 +437,21 @@
 
     <!-- KROK 1 -->
     <h2>Krok 1: Dostęp do CLI</h2>
-    <p>Połącz się zdalnie ze swoim urządzeniem zarządzającym. Poniższy screen wskazuje miejsce wprowadzania komend CLI (gotową komendę znajdziesz w Kroku 2):</p>
+    <p>Połącz się zdalnie ze swoim repeaterem. Poniższy screen wskazuje miejsce wprowadzania komend CLI (gotową komendę znajdziesz w Kroku 2):</p>
     
     <div class="media-placeholder">
-        <img src="screen_cli.jpeg" alt="Zrzut ekranu: Interfejs CLI MeshCore">
-        <span class="media-caption">Rys 1. Panel CLI – Miejsce wpisania komendy dla repeatera</span>
+        <img src="screen_cli.jpeg" alt="Zrzut ekranu: Interfejs CLI MeshCore" onclick="zoomImage(this)">
+        <span class="media-caption">Rys 1. Panel CLI – Miejsce wpisania komendy dla repeatera (kliknij, aby powiększyć)</span>
     </div>
 
     <!-- KROK 2 -->
     <h2>Krok 2: Wygenerowanie komendy CLI</h2>
-    <p>Strona automatycznie pobiera aktualny czas z Twojego urządzenia i precyzyjnie wylicza minuty pozostałe <strong>do końca testów (niedziela, godz. 20:00)</strong>. Skopiuj komendę i po prostu wklej ją do terminala CLI. Po zatwierdzeniu poczekaj na potwierdzenie OK.</p>
+    <p>Ta strona automatycznie pobiera aktualny czas z Twojego urządzenia i precyzyjnie wylicza minuty pozostałe <strong>do końca testów (niedziela, godz. 20:00)</strong>. Skopiuj komendę i po prostu wklej ją do terminala CLI. Po zatwierdzeniu poczekaj na potwierdzenie OK.</p>
 
     <div class="countdown-card">
         <div class="time-display" id="time-status">Pobieranie czasu systemowego...</div>
         
         <div class="cli-window">
-            <div class="cli-header">
-                <div class="cli-dot"></div>
-                <div class="cli-dot"></div>
-                <div class="cli-dot"></div>
-            </div>
             <span class="cli-body" id="command-text">tempradio 869.6179809,62.5,6,8,0</span>
         </div>
         
@@ -473,14 +497,13 @@
     <p>Dopiero po pomyślnym przesłaniu komendy do wszystkich podległych repeaterów (zachowując kierunek od najdalszego do najbliższego), zmień ustawienia w swoim Companionie.</p>
 
     <div class="media-placeholder">
-        <img src="screen_companion.jpeg" alt="Zrzut ekranu: Konfiguracja aplikacji Companion">
-        <span class="media-caption">Rys 2. Ustawienia aplikacji Companion – Zmiana parametrów SF oraz CR</span>
+        <img src="screen_companion.jpeg" alt="Zrzut ekranu: Konfiguracja aplikacji Companion" onclick="zoomImage(this)">
+        <span class="media-caption">Rys 2. Ustawienia aplikacji Companion – Zmiana parametrów SF oraz CR (kliknij, aby powiększyć)</span>
     </div>
 
     <p>W ustawieniach aplikacji Companion wprowadź następujące wartości ręcznie:</p>
     <ul>
         <li><strong>Spreading Factor (SF):</strong> zmień na <code>6</code></li>
-        <li><strong>Coding Rate (CR):</strong> upewnij się, że wynosi <code>8</code></li>
     </ul>
     
     <p>W niedzielę o godzinie 20:00, gdy repeatery same wrócą do domyślnych parametrów, Twoim jedynym zadaniem będzie ponowne przestawienie Companiona na SF8.</p>
@@ -490,7 +513,19 @@
     </div>
 </div>
 
+<!-- Element overlay do zoomu -->
+<div id="zoom-overlay" class="zoom-overlay" onclick="this.style.display='none'">
+    <img id="zoom-img" src="" alt="Powiększony obraz">
+</div>
+
 <script>
+    function zoomImage(img) {
+        const overlay = document.getElementById('zoom-overlay');
+        const zoomImg = document.getElementById('zoom-img');
+        zoomImg.src = img.src;
+        overlay.style.display = 'flex';
+    }
+
     // Sztywna docelowa data końca testów: Niedziela, 21 czerwca 2026 r., godzina 20:00:00
     const targetDate = new Date(2026, 5, 21, 20, 0, 0); // Miesiące w JS są indeksowane od 0 (5 = Czerwiec)
 
