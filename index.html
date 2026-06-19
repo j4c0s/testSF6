@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Testy SF6 na Zachodzie (20-21.06.2026)</title>
     <style>
         /* Zaawansowany i nowoczesny system zmiennych dla Light/Dark Mode */
@@ -456,6 +459,9 @@
         </div>
         
         <button class="btn-copy" onclick="copyCommand()">Skopiuj gotową komendę</button>
+        <p style="font-size: 0.85rem; margin-top: 16px; color: var(--text-muted); line-height: 1.4;">
+            <strong>Uwaga:</strong> Skopiowana komenda zawiera czas wyliczony w tej konkretnej minucie. Jeśli wkleisz ją dużo później, repeater może zakończyć testy z opóźnieniem. Najlepiej skopiuj komendę tuż przed jej użyciem w terminalu.
+        </p>
     </div>
 
     <h3>Opis struktury polecenia</h3>
@@ -507,6 +513,28 @@
     </ul>
     
     <p>W niedzielę o godzinie 20:00, gdy repeatery same wrócą do domyślnych parametrów, Twoim jedynym zadaniem będzie ponowne przestawienie Companiona na SF8.</p>
+
+    <!-- KROK 4 -->
+    <h2>Krok 4: Zalecane testy</h2>
+    <p>Abyśmy mogli wyciągnąć jak najlepsze wnioski z przeprowadzonych testów, zachęcamy do wykonania poniższych sprawdzeń:</p>
+    <ul>
+        <li><strong>Szybkość połączeń:</strong> Sprawdź, jak szybko nawiązywane są połączenia z poszczególnymi repeaterami.</li>
+        <li><strong>Wydajność wiadomości:</strong> Zwróć uwagę, czy wiadomości są wysyłane szybciej. Pamiętaj, że w sieci może być widocznych mniej urządzeń (tylko te przestawione na SF6).</li>
+        <li><strong>Analiza ścieżek:</strong> Przejrzyj ścieżki, którymi docierają do Ciebie wiadomości. Jakie zmiany zauważyłeś? Które repeatery przestały być widoczne?</li>
+        <li><strong>Dokumentacja (Sąsiedzi):</strong>
+            <ul>
+                <li>Zrób zrzut ekranu listy "Sąsiedzi" (Neighbours) przed zmianą na SF6 (opcjonalnie możesz wtedy wyczyścić listę dla lepszego porównania).</li>
+                <li>Zrób zrzut ekranu listy "Sąsiedzi" pod koniec testów w niedzielę, przed powrotem do SF8.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <!-- ANKIETA -->
+    <h2>Podsumowanie i Ankieta</h2>
+    <div class="callout callout-info" style="text-align: center;">
+        <p>Twoja opinia jest dla nas kluczowa! Po zakończeniu testów (lub w ich trakcie, jeśli masz już wnioski), prosimy o wypełnienie krótkiej, anonimowej ankiety.</p>
+        <a href="https://forms.gle/iC8YP65YbjEieHU59" target="_blank" rel="noopener noreferrer" class="btn-copy" style="display: inline-block; text-decoration: none; margin-top: 10px; width: auto; padding: 12px 32px;">Otwórz ankietę testową</a>
+    </div>
 
     <div class="footer-note">
         📡 Koordynacja akcji na kanale #zachod
