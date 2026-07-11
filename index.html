@@ -352,9 +352,17 @@
         <a href="sf6-testy.html" class="btn-action btn-secondary">
             📊 Raport z testów SF6
         </a>
-        <a href="https://lorameshcore.pl/" target="_blank" rel="noopener noreferrer" class="btn-action btn-secondary">
-            📖 Oficjalne Wiki MeshCore
+        <a href="https://meshcore.io" target="_blank" rel="noopener noreferrer" class="btn-action btn-secondary">
+            🌐 Oficjalna strona meshcore.io
         </a>
+    </div>
+
+    <!-- Krytyczna informacja o aktualizacji -->
+    <div class="callout callout-warn">
+        <strong>⚡ WAŻNE: Wymagana aktualizacja oprogramowania!</strong>
+        <p style="margin: 8px 0 0 0; color: var(--text-main);">
+            Aby móc korzystać z najnowszych funkcji sieci (takich jak prawidłowa obsługa regionów/scope czy optymalizacji 3-bajtowego prefixu), <strong>wszystkie repeatery oraz aplikacje klienckie Companion muszą być zaktualizowane do najnowszej wersji oprogramowania</strong>. Starsze wersje mogą ignorować pakiety ze specyficznym zakresem regionalnym lub nieprawidłowo dekodować pakiety z nowym nagłówkiem.
+        </p>
     </div>
 
     <!-- Ogólne parametry radiowe -->
@@ -403,50 +411,66 @@
     <!-- 2. REPEATER -->
     <div class="device-card">
         <span class="device-badge">Repeater</span>
-        <h3>📡 Przemiennik (Repeater)</h3>
+        <h3>📡 Przemiennik (Repeater) — Instrukcja krok po kroku</h3>
         <p>
-            Repeatery stanowią szkielet sieci i odpowiadają za przekazywanie pakietów. W roli repeatera moduł Bluetooth jest wyłączony, a całe zarządzanie odbywa się przez stronę konfiguracyjną lub wiersz poleceń (CLI).
+            Repeatery stanowią szkielet sieci i odpowiadają za przekazywanie pakietów. W roli repeatera moduł Bluetooth jest wyłączony, a całe zarządzanie odbywa się przez wbudowaną stronę WWW (konfiguracyjną) lub wiersz poleceń (CLI).
         </p>
 
-        <h4>A. Nazewnictwo, uprawnienia i rozgłoszenia</h4>
-        <ul>
-            <li><strong>Nazewnictwo (Name):</strong> Jeśli repeater nie ma włączonej / dokładnej lokalizacji GPS, postaraj się, aby jego nazwa ułatwiała identyfikację miejscowości (np. <code>RPT_Wroclaw_Krzyki</code>, <code>RPT_Luban_Poludnie</code>). Jeśli stacja jest w pełni solarna (off-grid) i stabilna, dodaj <code>*</code> na końcu nazwy (np. <code>RPT_Sulechow_Polnoc*</code>).</li>
-            <li><strong>Konto gościa (Guest Password):</strong> Jeśli chcesz dać gościom wgląd w statystyki sygnału i parametry pracy repeatera, hasło gościa pozostaw <strong>puste</strong> lub wpisz standardowe <code>hello</code>.</li>
-            <li><strong>Czasy rozgłoszeń (Adverty):</strong> Dla optymalizacji ruchu, zaleca się ustawianie czasu rozgłoszeń flood (Advert Flood) na minimum <strong>23 godziny</strong> (<code>23h</code> lub rzadziej). Zapobiega to zapychaniu pasma.</li>
-        </ul>
+        <div style="background-color: var(--bg-page); border-left: 4px solid var(--accent-primary); padding: 12px 16px; margin-bottom: 20px; border-radius: 0 12px 12px 0;">
+            <p style="margin: 0; font-weight: 600; color: var(--text-main); font-size: 0.95rem;">
+                🛠️ Lista kroków konfiguracyjnych i kontrolnych (Zalecana kolejność działania):
+            </p>
+        </div>
 
-        <h4>B. Podstawowa konfiguracja CLI (Optymalizacja sieci)</h4>
-        <p>
-            Zaloguj się do repeatera jako administrator, przejdź do zakładki <strong>CLI</strong> i wprowadź poniższe komendy (upewnij się, że po każdej komendzie konsola zwróci komunikat <code>OK</code>):
-        </p>
-        <pre><code>set flood.max 6
+        <ol style="margin-bottom: 24px;">
+            <li>
+                <strong>Aktualizacja Firmware:</strong> Pierwszym i najważniejszym krokiem jest wgranie najnowszej stabilnej wersji oprogramowania MeshCore. Bez tego repeater nie będzie poprawnie obsługiwał filtrowania regionów ani 3-bajtowego prefixu.
+            </li>
+            <li>
+                <strong>Sprawdzenie statusu sprzętowego (Krok Kontrolny):</strong> Zaloguj się na stronę urządzenia lub przez konsolę i sprawdź poprawność działania kluczowych elementów:
+                <ul>
+                    <li>Czy napięcie baterii/zasilania solarnego jest w normie?</li>
+                    <li>Czy moduł GPS (jeśli występuje) złapał "fixa" i poprawnie podaje koordynaty?</li>
+                    <li>Czy poziom szumów tła (Noise Floor) nie jest podejrzanie wysoki?</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Ustawienie nazwy i lokalizacji:</strong>
+                <ul>
+                    <li><strong>Nazewnictwo:</strong> Jeśli repeater nie ma włączonego GPS, jego nazwa powinna wskazywać na miejscowość/lokalizację (np. <code>RPT_Wroclaw_Krzyki</code>, <code>RPT_Luban_Poludnie</code>). Dla w pełni solarnych (off-grid) stacji dodajemy gwiazdkę na końcu: <code>RPT_Sulechow_Polnoc*</code>.</li>
+                    <li><strong>Hasło gościa:</strong> Jeśli chcesz udostępnić statystyki lokalnym użytkownikom, zostaw hasło gościa puste lub wpisz <code>hello</code>.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Konfiguracja czasów rozgłoszeń:</strong>
+                Ustaw czas rozgłaszania statusów/reklam (Advert Flood / Info) na minimum <strong>23 godziny</strong> (<code>23h</code>), aby nie zaśmiecać pasma niepotrzebnymi pakietami statusowymi.
+            </li>
+            <li>
+                <strong>Wprowadzenie optymalizacji sieciowych (CLI):</strong>
+                Połącz się z urządzeniem przez interfejs CLI, przejdź do konsoli i wpisz kolejno poniższe komendy (upewniając się za każdym razem, że urządzenie odpowiada <code>OK</code>):
+                <pre><code>set flood.max 6
 set multi.acks 1
 set path.hash.mode 2</code></pre>
-        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: -8px;">
-            <em>Wyjaśnienie:</em> <code>flood.max 6</code> ogranicza limit do 6 hopów (zapobiega krążeniu tzw. pokemonów), <code>multi.acks 1</code> włącza podwójne potwierdzenia na kanałach, a <code>path.hash.mode 2</code> aktywuje wydajniejszy, 3-bajtowy prefix identyfikatora.
-        </p>
-
-        <h4>C. Konfiguracja Regionów (Regional Scope)</h4>
-        <p>
-            Aby repeater nie przekazywał niechcianego ruchu z odległych województw, musimy skonfigurować regiony. Możesz to zrobić łatwo w nowej wersji aplikacji przechodząc do pozycji menu <strong>„Zarządzaj regionami”</strong> lub ręcznie przy użyciu wiersza poleceń <strong>CLI</strong> według poniższej instrukcji:
-        </p>
-
-        <ol style="margin-bottom: 0;">
-            <li>Wpisz <code>region</code>, aby sprawdzić obecne regiony (standardowo będzie to <code>*^ F</code>).</li>
-            <li>Dodaj region ogólny oraz regionalny za pomocą komendy <code>region put</code>, czekając każdorazowo na <code>OK</code>:
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: -8px; margin-bottom: 12px;">
+                    <em>Co to zmienia?</em> <code>flood.max 6</code> chroni przed niekończącym się krążeniem pakietów, <code>multi.acks 1</code> włącza podwójne potwierdzenia, a <code>path.hash.mode 2</code> aktywuje zoptymalizowany pod kątem kolizji 3-bajtowy prefix identyfikatorów.
+                </p>
+            </li>
+            <li>
+                <strong>Ustawienie zakresów regionalnych (Regional Scope):</strong>
+                Aby ograniczyć niepożądany szum z odległych części kraju, skonfiguruj obsługiwane regiony (scope). W nowej wersji oprogramowania możesz to wyklikać w menu <strong>„Zarządzaj regionami”</strong> lub wykonać ręcznie w CLI:
                 <pre><code>region put pl
 region put pl-ds
-region put zachod</code></pre>
-            </li>
-            <li>Zezwól na ruch typu Flood dla nowo dodanych regionów komendą <code>region allowf</code>:
-                <pre><code>region allowf pl
+region put zachod
+region allowf pl
 region allowf pl-ds
-region allowf zachod</code></pre>
+region allowf zachod
+region save
+reboot</code></pre>
             </li>
-            <li>Zapisz zmiany w pamięci urządzenia:
-                <pre><code>region save</code></pre>
+            <li>
+                <strong>Końcowa weryfikacja (Krok Kontrolny):</strong>
+                Po restarcie zaloguj się ponownie, wpisz w CLI komendę <code>region</code> i upewnij się, że na liście widnieją wyłącznie zadeklarowane przez Ciebie regiony z flagami zezwalającymi na ruch Flood. Sprawdź również w zakładce logów lub statystyk, czy pakiety lokalne są prawidłowo przekazywane.
             </li>
-            <li>Wykonaj ponowne uruchomienie urządzenia komendą <code>reboot</code> i zweryfikuj listę wpisując ponownie <code>region</code>.</li>
         </ol>
     </div>
 
@@ -468,7 +492,18 @@ region allowf zachod</code></pre>
     <!-- PROPOZYCJE SCOPE / KANAŁÓW -->
     <h2>🗺️ Przyszłościowe Kanały i Zasięg (Scope)</h2>
     <p>
-        Poniższa tabela przedstawia planowane w przyszłości kanały w sieci MeshCore na Zachodzie wraz z przypisanymi do nich zasięgami regionalnymi (Scope). Funkcja ta zacznie w pełni działać, gdy większość repeaterów w regionie będzie miała prawidłowo skonfigurowane regiony zgodnie z powyższą instrukcją.
+        Funkcja <strong>Regional Scope (Zakres Regionalny)</strong> pozwala na inteligentne trasowanie wiadomości w sieci mesh. Dzięki temu pakiety wysłane na danym kanale są przekazywane wyłącznie przez repeatery posiadające odpowiednio skonfigurowany zakres (np. <code>zachod</code> lub <code>pl-ds</code>), co diametralnie zmniejsza obciążenie pasma radiowego w pozostałych częściach Polski.
+    </p>
+
+    <div class="callout callout-info">
+        <strong>💡 Jak pisać na kanałach ze scope?</strong>
+        <p style="margin: 8px 0 0 0; color: var(--text-main);">
+            Aby wysłać wiadomość o ograniczonym zasięgu (np. na kanale <code>#zachod</code>), w nowej wersji oprogramowania klienckiego wchodzimy w <strong>ustawienia danego kanału</strong> i w polu <strong>Scope</strong> (lub „Zasięg / Region”) wpisujemy odpowiadający mu identyfikator (np. <code>zachod</code>). Od tej pory każda wiadomość wysłana na tym kanale otrzyma automatyczny nagłówek regionalny. Repeatery spoza tego obszaru (które nie mają wgranego tego regionu komendą <code>region put</code>) zignorują te pakiety, nie obciążając lokalnego eteru.
+        </p>
+    </div>
+
+    <p>
+        Poniższa tabela przedstawia planowane i aktualne kanały w sieci MeshCore na Zachodzie wraz z przypisanymi do nich zasięgami regionalnymi (Scope):
     </p>
 
     <table>
@@ -483,12 +518,12 @@ region allowf zachod</code></pre>
             <tr>
                 <td><strong>#polska</strong></td>
                 <td><code>pl</code></td>
-                <td>Kanał ogólnokrajowy</td>
+                <td>Kanał ogólnokrajowy (odbierany w całym kraju)</td>
             </tr>
             <tr>
                 <td><strong>#zachod</strong></td>
                 <td><code>zachod</code></td>
-                <td>Cały zachodni region Polski</td>
+                <td>Cały zachodni region Polski (Lubuskie, Wielkopolska, Dolny Śląsk)</td>
             </tr>
             <tr>
                 <td><strong>#dolnoslaskie</strong></td>
@@ -498,12 +533,12 @@ region allowf zachod</code></pre>
             <tr>
                 <td><strong>#ds-test</strong></td>
                 <td><code>pl-ds</code></td>
-                <td>Testy techniczne Dolny Śląsk</td>
+                <td>Testy techniczne i konfiguracyjne (Dolny Śląsk)</td>
             </tr>
             <tr>
                 <td><strong>#wroclaw</strong></td>
                 <td><code>wro</code> lub <code>wroclaw</code></td>
-                <td>Wrocław i najbliższe okolice</td>
+                <td>Wrocław i najbliższe powiaty ościenne</td>
             </tr>
             <tr>
                 <td><strong>#wlkp</strong></td>
