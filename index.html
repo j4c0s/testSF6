@@ -566,7 +566,7 @@
 
     <!-- Sekcja Hero -->
     <section class="hero">
-        <span class="tagline">POLSKA ZACHODNIA / LORA.869</span>
+        <span class="tagline">POLSKA ZACHODNIA / LORA.868</span>
         <h1>Przewodniki regionalne</h1>
         <p>
             Vademecum wiedzy, konfiguracji i dobrych praktyk dla budowniczych sieci LoRa MeshCore w regionie zachodnim (Dolny Śląsk, Lubuskie, Wielkopolska). Przeczytaj poradniki, by zsynchronizować swój węzeł z regionalnymi ustaleniami.
@@ -585,7 +585,7 @@
                     <div class="card-header-icon">◈◊ ONBOARDING</div>
                     <h3 class="card-title">Jak zacząć</h3>
                     <p class="card-description">
-                        Wybór kompatybilnego sprzętu radiowego, parowanie Bluetooth z aplikacją Companion na telefonie oraz pierwsze kroki w sieci.
+                        Wybór kompatybilnego sprzętu radiowego LoRa, parowanie Bluetooth z aplikacją Companion na telefonie oraz pierwsze kroki w sieci.
                     </p>
                 </div>
                 <div class="card-footer-link">explore →</div>
@@ -597,7 +597,7 @@
                     <div class="card-header-icon">◇◊ REFERENCE</div>
                     <h3 class="card-title">Parametry radiowe</h3>
                     <p class="card-description">
-                        Standardowy krajowy preset EU/UK Narrow, dedykowana częstotliwość, aktywacja 3-bajtowego nagłówka i kanoniczne komendy CLI.
+                        Standardowy krajowy preset EU/UK Narrow, dedykowana częstotliwość w paśmie 868 MHz oraz aktywacja 3-bajtowego nagłówka.
                     </p>
                 </div>
                 <div class="card-footer-link">explore →</div>
@@ -609,7 +609,7 @@
                     <div class="card-header-icon">◉◊ DEEP DIVE</div>
                     <h3 class="card-title">Konfiguracja repeatera</h3>
                     <p class="card-description">
-                        Optymalizacja czasów rozgłoszeń, precyzyjne ustawienia limitów przeskoku (flood.max/unscoped) oraz sprzętowa weryfikacja przemiennika przed startem.
+                        Optymalizacja czasów rozgłoszeń, ustawianie delayów dopasowanych do topologii oraz precyzyjne limity przeskoku (flood.max/unscoped).
                     </p>
                 </div>
                 <div class="card-footer-link">explore →</div>
@@ -621,7 +621,7 @@
                     <div class="card-header-icon">⌁◊ CONTRIBUTE</div>
                     <h3 class="card-title">Uruchomienie Observera</h3>
                     <p class="card-description">
-                        Jak przekształcić tani moduł ESP32 w zawsze aktywną stację nasłuchującą (Observera), która publikuje ramki na mapy letsmesh oraz meshcorekrk.
+                        Jak przekształcić stację opartą na ESP32 w zawsze aktywny nasłuch (Observera), który publikuje ramki na mapy letsmesh oraz meshcorekrk.
                     </p>
                 </div>
                 <div class="card-footer-link">explore →</div>
@@ -731,24 +731,25 @@
                 title: "Jak zacząć (Getting Started)",
                 content: `
                     <h3>1. Wybór odpowiedniego sprzętu radiowego</h3>
-                    <p>Aby dołączyć do społeczności MeshCore na Zachodzie, potrzebujesz urządzenia radiowego LoRa pracującego na europejskim pasmie ISM <strong>868 MHz / 433 MHz</strong> (u nas standard to 868 MHz). Rekomendowane platformy:</p>
-                    <ul>
-                        <li><strong>Heltec V3:</strong> Tani, bardzo popularny moduł z małym ekranem OLED. Idealny jako domowy klient lub pierwszy węzeł biurkowy.</li>
-                        <li><strong>LILYGO T-Beam (V1.1 / Supreme):</strong> Posiada wbudowany moduł GPS oraz koszyk na akumulator 18650. Wyśmienity na wyprawy terenowe.</li>
-                        <li><strong>LILYGO T-Echo:</strong> Bardzo energooszczędny moduł z ekranem e-papierowym (E-ink) w ładnej obudowie.</li>
-                        <li><strong>Station G1:</strong> Gotowe, odporne na warunki atmosferyczne urządzenie w metalowej obudowie, idealne do montażu na dachu w roli stacji bazowej.</li>
-                    </ul>
+                    <p>Pracujemy wyłącznie na europejskim pasmie ISM <strong>868 MHz</strong>, które gwarantuje stabilność i legalność działania sieci mesh w Polsce. Nie korzystamy z innych pasm częstotliwości.</p>
+
+                    <p>Pełna lista oficjalnie wspieranych i przetestowanych urządzeń radiowych jest stale aktualizowana i dostępna pod adresem:</p>
+                    <div style="text-align: center; margin: 20px 0;">
+                        <a href="https://meshcore.io" target="_blank" rel="noopener noreferrer" class="btn-action" style="font-size: 0.9rem;">
+                            📖 Zobacz listę urządzeń na meshcore.io
+                        </a>
+                    </div>
 
                     <h3>2. Wgrywanie oprogramowania (Flashowanie)</h3>
                     <p>Oprogramowanie wgrywa się w niezwykle prosty sposób przez przeglądarkę internetową:</p>
                     <ol>
                         <li>Podłącz urządzenie kablem USB do komputera (upewnij się, że kabel obsługuje przesył danych, a nie tylko ładowanie).</li>
                         <li>Wejdź na oficjalną stronę instalatora: <a href="https://meshcore.io/flasher" target="_blank" rel="noopener noreferrer" class="text-accent-primary">meshcore.io/flasher</a>.</li>
-                        <li>Kliknij przycisk połączenia, wybierz swój port szeregowy COM z listy i postępuj zgodnie z instrukcjami na ekranie (instalator sam dobierze i zainstaluje najnowsze stabilne pliki binarne).</li>
+                        <li>Kliknij przycisk połączenia, wybierz swój port szeregowy COM z listy i postępuj zgodnie z instrukcjami na ekranie (instalator sam dobierze i zainstaluje najnowsze stabilne pliki binarne dla Twojej płytki).</li>
                     </ol>
 
                     <div class="alert-callout alert-callout-info">
-                        <strong>🔋 Węzły bateryjne:</strong> Jeśli budujesz węzeł zasilany wyłącznie małą baterią i chcesz zmaksymalizować czas pracy, rozważ wgranie specjalnego wydania oprogramowania PowerSaving (EasySkyMesh). Pliki instalacyjne znajdziesz w repozytorium GitHub: <a href="https://github.com/IoTThinks/EasySkyMesh/releases" target="_blank" rel="noopener noreferrer" class="text-accent-primary">github.com/IoTThinks/EasySkyMesh/releases</a>.
+                        <strong>🔋 Węzły bateryjne:</strong> Jeśli budujesz węzeł zasilany wyłącznie małą baterią i chcesz zmaksymalizować czas pracy, rozważ wgranie dedykowanego oprogramowania PowerSaving (EasySkyMesh). Pliki instalacyjne znajdziesz w repozytorium GitHub: <a href="https://github.com/IoTThinks/EasySkyMesh/releases" target="_blank" rel="noopener noreferrer" class="text-accent-primary">github.com/IoTThinks/EasySkyMesh/releases</a>.
                     </div>
 
                     <h3>3. Pierwsze uruchomienie i parowanie</h3>
@@ -762,10 +763,10 @@
             },
             reference: {
                 badge: "◇◊ REFERENCE",
-                title: "Parametry radiowe i CLI (Radio Settings)",
+                title: "Parametry radiowe (Radio Settings)",
                 content: `
                     <h3>1. Standardowy preset dla Polski</h3>
-                    <p>Wypracowanym i ujednoliconym standardem w całym kraju jest preset <strong>EU/UK Narrow</strong>. Gwarantuje on świetny zasięg na gęstym obszarze miejskim i idealnie radzi sobie w eterze.</p>
+                    <p>Wypracowanym i ujednoliconym standardem w całym kraju jest preset <strong>EU/UK Narrow</strong> na pasmie <strong>868 MHz</strong>. Gwarantuje on świetny zasięg na gęstym obszarze miejskim i idealnie radzi sobie w eterze.</p>
 
                     <table>
                         <thead>
@@ -780,6 +781,11 @@
                                 <td><strong>Preset radiowy</strong></td>
                                 <td><code>EU/UK (Narrow)</code></td>
                                 <td>Ujednolicony zestaw szerokości pasma i kodowania</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Pasmo pracy</strong></td>
+                                <td><code>868 MHz</code></td>
+                                <td>Wyłączne dopuszczalne pasmo częstotliwości radiowych</td>
                             </tr>
                             <tr>
                                 <td><strong>Częstotliwość</strong></td>
@@ -813,21 +819,9 @@
                         <li>Zatwierdź zmiany klikając ikonę akceptacji ("ptaszek") w prawym górnym rogu.</li>
                     </ol>
 
-                    <h3>3. Kanoniczne komendy konfiguracyjne CLI</h3>
-                    <p>Jeśli konfigurujesz urządzenie (np. repeater) przez terminal/konsolę szeregową, użyj poniższych komend do ujednolicenia parametrów radiowych:</p>
-
-                    <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code># Ustawienie poprawnego presetu radiowego
-set modem.preset EU_UK_NARROW
-
-# Wymuszenie częstotliwości regionalnej
-set lora.frequency 869618000
-
-# Aktywacja obsługi nowoczesnego prefixu 3-bajtowego
-set prefix.3byte true
-
-# Zapisanie zmian i restart
-write
-reboot</code></pre>
+                    <div class="alert-callout alert-callout-info">
+                        <strong>💡 Konfiguracja CLI:</strong> Parametry techniczne i komendy dla CLI związane z zaawansowanym dostrajaniem przemienników i observerów znajdują się bezpośrednio w kolejnych poradnikach (w sekcji <em>Konfiguracja repeatera</em>).
+                    </div>
                 `
             },
             deep_dive: {
@@ -835,45 +829,87 @@ reboot</code></pre>
                 title: "Konfiguracja Repeatera (Repeater Tuning)",
                 content: `
                     <h3>Przemiennik (Repeater) – Kręgosłup sieci</h3>
-                    <p>Repeatery to bezobsługowe stacje bazowe umieszczane wysoko (dachy, maszty, kominy), których jedynym celem jest odbiór, weryfikacja i dalsze przekazywanie (floodowanie) ramek radiowych. Nie posiadają sparowanego telefonu przez Bluetooth.</p>
+                    <p>Repeatery to bezobsługowe stacje bazowe umieszczane wysoko (dachy, maszty, kominy), których jedynym celem jest odbiór, weryfikacja i dalsze przekazywanie (floodowanie) ramek radiowych w paśmie 868 MHz.</p>
 
-                    <h3>1. Kroki kontrolne przed i po instalacji</h3>
+                    <h3>1. Kroki kontrolne przed instalacją</h3>
                     <p>Zanim umieścisz repeater w docelowej, trudnodostępnej lokalizacji, bezwzględnie przeprowadź procedurę testową:</p>
                     <ul>
-                        <li><strong>Kontrola zasilania:</strong> Zmierz pobór prądu i upewnij się, że ładowanie z akumulatora lub zasilacza buforowego działa stabilnie.</li>
+                        <li><strong>Kontrola zasilania:</strong> Zmierz pobór prądu i upewnij się, że zasilanie z akumulatora lub zasilacza buforowego działa stabilnie.</li>
                         <li><strong>Status GPS:</strong> Jeśli repeater posiada GPS, wystaw go na zewnątrz i sprawdź, czy w logach pojawia się prawidłowy status lokalizacji (tzw. GPS fix).</li>
                         <li><strong>Poziom szumów (Noise Floor):</strong> Sprawdź wskaźnik RSSI szumów tła. Jeśli stale przekracza -110 dBm, w pobliżu może znajdować się źródło silnych zakłóceń elektromagnetycznych (np. zasilacz impulsowy złej jakości), co dramatycznie ograniczy zasięg.</li>
                     </ul>
 
-                    <h3>2. Konfiguracja optymalizacyjna przez CLI</h3>
-                    <p>Aby zapobiec przeciążeniu sieci przy gęstym pokryciu, repeatery muszą ściśle limitować trasowanie pakietów. Połącz się przez konsolę USB i wklej następujące parametry:</p>
+                    <h3>2. Konfiguracja czasu rozgłoszeń (Adverty)</h3>
+                    <p>Wzorem dojrzałych sieci takich jak Colorado Mesh, nie nadajemy statusów zbyt często. Rozróżniamy reklamy lokalne (tylko do bezpośrednich sąsiadów) oraz reklamy sieciowe (rozsyłane floodem po całej sieci):</p>
+                    <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code># Lokalna reklama statusu co 4 godziny (tylko do sąsiadów)
+set advert.interval 240
 
-                    <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code># Ustawienie maksymalnego limitu przeskoków dla pakietów ze scope
-set flood.max 6
+# Globalna reklama floodowana raz na dobę (24 godziny)
+set flood.advert.interval 24</code></pre>
+                    <p>Taki podział zapobiega niepotrzebnemu wysycaniu pasma radiowego zbędnymi danymi statusowymi.</p>
 
-# Konfiguracja wielokrotnych potwierdzeń i skróconych tras
-set multi.acks 1
-set path.hash.mode 2</code></pre>
+                    <h3>3. Profile opóźnień (Delay Profiles)</h3>
+                    <p>Wprowadzamy zróżnicowanie opóźnień nadawania (TX/RX delays), aby węzły położone wyżej czekały ułamek sekundy dłużej, pozwalając na retransmisję węzłom położonym niżej. Dostosowaliśmy te profile do polskiej gęstości węzłów:</p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Profil</th>
+                                <th>Sąsiedzi</th>
+                                <th>Przeznaczenie / Przykład</th>
+                                <th>Parametry CLI</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>WYSOKI / MASZT</strong></td>
+                                <td>10+</td>
+                                <td>Doskonale położone wysokie maszty, wieże, dachy wieżowców o dalekim zasięgu.</td>
+                                <td><code>set txdelay 1.5<br>set direct.txdelay 1.0<br>set rxdelay 3</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>DACH / ROOFTOP</strong></td>
+                                <td>4 - 9</td>
+                                <td>Standardowy montaż anteny na dachu budynku jednorodzinnego lub średniej wysokości bloku.</td>
+                                <td><code>set txdelay 0.8<br>set direct.txdelay 0.4<br>set rxdelay 3</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>DOM / NISKI</strong></td>
+                                <td>1 - 3</td>
+                                <td>Węzeł domowy, niski dach, parapet lub montaż wewnątrz pomieszczenia.</td>
+                                <td><code>set txdelay 0.3<br>set direct.txdelay 0.1<br>set rxdelay 3</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>4. Limity przeskoku (flood.max i flood.max.unscoped)</h3>
+                    <p>Przy poprawnie skonfigurowanych regionach i limitach dla ruchu ogólnego możemy bezpiecznie pozwolić na dalekie trasy:</p>
+                    <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code># Ustawienie wysokiego limitu przeskoków dla ukierunkowanych pakietów regionalnych (scopes)
+set flood.max 64
+
+# Ograniczenie przesyłu dla pakietów ogólnych bez zdefiniowanego scope (unscoped)
+set flood.max.unscoped 8</code></pre>
 
                     <div class="alert-callout alert-callout-info">
-                        <strong>⚙️ Dostrajanie parametru flood.max:</strong>
-                        Wartość <code>flood.max</code> (domyślnie 6) może być elastycznie dostosowana. Dobrą praktyką jest monitorowanie sieci: jeśli widzisz na mapie lub w logach, że pakiety od najdalszych sąsiadów docierają do Ciebie w maksymalnie 4 przeskokach (hopach), możesz obniżyć limit <code>flood.max</code> np. do 5. Zredukuje to zbędny ruch radiowy bez ucinania rzeczywistych tras komunikacyjnych.
+                        <strong>💡 Dostrajanie flood.max.unscoped:</strong>
+                        Początkowo zalecamy ustawienie parametru <code>flood.max.unscoped</code> w przedziale <strong>6 do 8</strong>. Dobre i bezpieczne dobranie tej wartości opiera się na obserwacji czatu: sprawdź, z jaką maksymalną liczbą przeskoków (hopów) docierają do Ciebie najbardziej stabilne i potrzebne wiadomości od stałych korespondentów.
                     </div>
 
-                    <h3>3. Wprowadzenie parametru flood.max.unscoped</h3>
-                    <p>Unscoped pakiety to takie, które nie posiadają zdefiniowanego żadnego zakresu terytorialnego (scope). Pochodzą zazwyczaj od nowo uruchomionych, nieskonfigurowanych urządzeń. Aby chronić pasmo, limitujemy ich zasięg:</p>
-                    <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code># Ograniczenie przesyłu pakietów bez scope do 3 przeskoków
-set flood.max.unscoped 3</code></pre>
-                    <p>Dzięki temu "śmieciowy" lub nieświadomy ruch od domyślnie skonfigurowanych węzłów wygaśnie szybko w eterze, dając pierwszeństwo zaplanowanemu ruchowi regionalnemu.</p>
+                    <h3>5. Pozostałe ustawienia optymalizacyjne</h3>
+                    <p>Wprowadź dodatkowe parametry, aby ujednolicić zachowanie węzła w sieci:</p>
+                    <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code># Włączenie 2-bajtowych path-hashów oraz tryb trasowania
+set path.hash.mode 1
+set multi.acks 1
 
-                    <h3>4. Ograniczenie czasu rozgłoszeń statusu</h3>
-                    <p>Repeater nie może wysyłać swoich własnych pakietów statusowych (reklam) zbyt często. Ustaw interwał informacyjny (Advert/Info Flood) na <strong>23 godziny</strong>:</p>
-                    <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code># Rozgłaszanie statusu raz na dobę
-set status.interval 82800</code></pre>
+# Resetowanie gainu radia SX1262 w celu ochrony przed zatykaniem silnym sygnałem
+set agc.reset.interval 500
 
-                    <div class="alert-callout alert-callout-warn">
-                        <strong>⚡ Solidarność sąsiedzka:</strong> Jeśli Twój repeater stoi wysoko na granicy województw (np. na wzniesieniu w Dolnośląskim <code>pl-ds</code>, skąd doskonale "widać" Lubuskie <code>pl-lb</code>), dodaj do niego sąsiednie regiony za pomocą komendy <code>region put pl-lb</code> oraz <code>region allowf pl-lb</code>. Pomagasz w ten sposób przesyłać pakiety sąsiadom, spajając całą zachodnią sieć!
-                    </div>
+# Pozostawienie pustego hasła gościa ułatwia diagnostykę statusu sąsiadom
+set guest.password ""
+
+# Zapis i reboot
+write
+reboot</code></pre>
                 `
             },
             contribute: {
@@ -881,13 +917,13 @@ set status.interval 82800</code></pre>
                 title: "Uruchomienie Observera na ESP32 (MQTT Setup)",
                 content: `
                     <h3>Czym jest Observer?</h3>
-                    <p>Observer (obserwator) to stacja nasłuchowa, która nie wysyła własnych pakietów w eter (lub robi to niezwykle rzadko), ale cały czas odbiera ramki radiowe od innych użytkowników sieci i przesyła je za pośrednictwem domowego Wi-Fi do internetowych baz danych i map.</p>
+                    <p>Observer (obserwator) to stacja nasłuchowa na pasmie 868 MHz, która nie nadaje własnych pakietów w eter, ale stale odbiera ramki radiowe od innych użytkowników sieci i przesyła je za pośrednictwem domowego Wi-Fi do internetowych baz danych i map.</p>
 
                     <h3>Jak zrobić repeater z funkcją Observera na ESP32?</h3>
-                    <p>Zwykła płytka ESP32 (np. Heltec V3 lub T-Beam) stojąca w domu może jednocześnie nasłuchiwać pasma i przekazywać pakiety do internetowych systemów śledzenia topologii sieci. Konfiguracja krok po kroku:</p>
+                    <p>Dowolna płytka ESP32 z radiem LoRa 868 MHz podłączona w domu pod Wi-Fi może jednocześnie nasłuchiwać pasma i przekazywać pakiety do internetowych systemów śledzenia topologii sieci. Konfiguracja krok po kroku:</p>
 
                     <ol>
-                        <li>Zainstaluj oprogramowanie na ESP32 zgodnie z instrukcją z sekcji <strong>Onboarding</strong>.</li>
+                        <li>Zainstaluj oprogramowanie na urządzeniu zgodnie z instrukcją z sekcji <strong>Onboarding</strong>.</li>
                         <li>Podłącz urządzenie do komputera i uruchom CLI/konsolę szeregową.</li>
                         <li>Skonfiguruj dane swojej domowej sieci Wi-Fi, aby urządzenie mogło połączyć się z Internetem:</li>
                     </ol>
@@ -1060,7 +1096,7 @@ reboot</code></pre>
                         <li><strong>Zakłócenia elektromagnetyczne:</strong> Antena GPS umieszczona zbyt blisko anteny nadawczej LoRa może ulec tymczasowemu przesterowaniu podczas nadawania ramki radiowej. Zachowaj dystans minimum kilku centymetrów między antenami.</li>
                     </ul>
 
-                    <h3>4. Bardzo słaby zasięg i wysokie szumy</h3>
+                    <h3>4. Bardzo słaby zasięg i wysokie szumy na paśmie 868 MHz</h3>
                     <ul>
                         <li><strong>Niedopasowanie anteny:</strong> Używanie fabrycznych anten dołączanych do płytek deweloperskich (często strojonych błędnie na pasmo 915 MHz zamiast europejskiego 868 MHz) dramatycznie obniża sprawność nadawania. Zainwestuj w sprawdzoną antenę dedykowaną na pasmo 868 MHz.</li>
                         <li><strong>Współczynnik SWR:</strong> Nadawanie bez podłączonej anteny może nieodwracalnie spalić końcówkę mocy (układ RF / transiwer) w Twojej płytce. Nigdy nie uruchamiaj urządzenia bez wkręconej anteny!</li>
