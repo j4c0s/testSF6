@@ -237,87 +237,117 @@
         <p>Przed umieszczeniem przemiennika wysoko na dachu lub maszcie, upewnij się, że stacja działa bez zarzutu:</p>
         <ul>
             <li><strong>Zasilanie i pobór prądu:</strong> Sprawdź obciążenie akumulatorów lub zasilacza buforowego.</li>
-            <li><strong>Status GPS Fix:</strong> Jeśli moduł ma GPS, upewnij się, że widzi satelity na otwartym terenie.</li>
-            <li><strong>Poziom szumów (Noise Floor):</strong> Zmierz wskaźnik RSSI tła. Ciągły poziom szumów powyżej -110 dBm oznacza lokalne zakłócenia utrudniające odbiór.</li>
+            <li><strong>Poziom szumów (Noise Floor):</strong> Zmierz wskaźnik RSSI tła. Ciągły poziom szumów powyżej -110 dBm oznacza lokalne zakłócenia utrudniające odbiór. W eliminacji zakłóceń może pomóc filtr szczelinowy (cavity filter), szczególnie jeżeli w pobliżu znajdują się maszty telefonii komórkowej (BTS).</li>
         </ul>
 
         <h2>2. Nazewnictwo Repeaterów</h2>
         <div class="alert-callout alert-callout-warn">
-            <strong>Dobra praktyka:</strong> Ze względu na brak sztywnego krajowego standardu, zalecamy w nazwie przemiennika jasno wskazać miejscowość/dzielnicę oraz typ montażu, np. <code>RPT_Wroclaw_Krzyki</code> lub <code>RPT_Luban_Maszt</code>. Ułatwia to błyskawiczną identyfikację tras sygnału.
+            <strong>Dobra praktyka:</strong> Ze względu na brak sztywnego krajowego standardu, najważniejsze jest podanie <strong>lokalizacji pozwalającej łatwo określić położenie przemiennika</strong>. W nazwie nie musi znajdować się sztywne określenie "typ montażu", ani skrót "RPT", o ile nazwa jednoznacznie identyfikuje fizyczną lokalizację stacji bazowej.
         </div>
 
         <h2>3. Rozgłoszenia (Adverty)</h2>
         <p>
-            Aby zapobiec wysycaniu pasma częstymi, powtarzającymi się ramkami statusu, konfigurujemy rzadkie interwały reklam lokalnych oraz globalnych:
+            Aby zapobiec wysycaniu pasma częstymi, powtarzającymi się ramkami statusu, konfigurujemy rzadkie interwały advertów (lokalnych oraz globalnych):
         </p>
         <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code># Status lokalny tylko do bezpośrednich sąsiadów co 4 godziny (240 minut)
 set advert.interval 240
 
-# Status globalny przekazywany floodem po sieci co 24 godziny
-set flood.advert.interval 24</code></pre>
-
-        <h2>4. Profile Opóźnień Nadawania (txdelay)</h2>
+# Status globalny przekazywany floodem po sieci co 23 godziny (1380 minut, 0 hopów)
+set flood.advert.interval 23</code></pre>
         <p>
-            Zróżnicowanie czasów opóźnienia chroni sieć przed kolizjami radiowymi na tym samym obszarze. Im wyżej położony węzeł, tym dłużej powinien odczekać przed retransmisją, pozwalając na nadanie stacjom położonym niżej:
+            Powyższe konfiguracje oznaczają, że:
+            <ul>
+                <li><strong>Rozgłoszenie lokalne (<code>advert.interval</code>):</strong> Wysyłane jest co <strong>240 minut (czyli równe 4 godziny)</strong>. Służy wyłącznie bezpośrednim sąsiadom.</li>
+                <li><strong>Rozgłoszenie globalne (<code>flood.advert.interval</code>):</strong> Następuje co <strong>23 godziny</strong> (ze statusem 0 hopów) i rozprzestrzenia się po całej sieci jako flood.</li>
+            </ul>
+        </p>
+
+        <h2>4. Synchronizacja Czasu (Clock Sync)</h2>
+        <p>
+            Prawidłowy czas systemowy na repeaterze jest kluczowy dla właściwej interpretacji logów i poprawności routingu. Do synchronizacji czasu służy dedykowane polecenie:
+        </p>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code># Synchronizacja czasu z podłączonym urządzeniem / siecią
+clock sync</code></pre>
+        <p>
+            <strong>Wskazówka:</strong> W przypadku, gdy czas systemowy na urządzeniu jest błędny i z jakiegoś powodu nie da się go cofnąć tradycyjną komendą, należy najpierw zresetować zegar systemowy poleceniem, a następnie wykonać synchronizację:
+        </p>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code># Reset zegara systemowego przy problemach z synchronizacją wstecz
+clkreboot
+
+# Następnie ponowna synchronizacja czasu
+clock sync</code></pre>
+
+        <h2>5. Ustawienia Właściciela i Tożsamości</h2>
+        <p>
+            Dla ułatwienia diagnostyki sieciowej i identyfikacji stacji bazowych, niezwykle przydatne jest poprawne ustawienie właściciela oraz opisu stacji:
+        </p>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code># Ustawienie identyfikatora / znaku wywoławczego właściciela przemiennika
+set owner "TWÓJ_ZNAK_LUB_NICK"</code></pre>
+
+        <h2>6. Pozostała konfiguracja optymalizacyjna</h2>
+        <p>Poniżej opisano dodatkowe parametry optymalizacyjne, które należy wprowadzić w CLI:</p>
+
+        <ul>
+            <li><strong><code>set path.hash.mode 2</code>:</strong> Wymusza dwubajtowy tryb generowania skrótów ścieżek (path-hash), co znacząco zmniejsza ryzyko kolizji identyfikatorów tras w większych sieciach.</li>
+            <li><strong><code>set multi.acks 1</code>:</strong> Aktywuje wielokrotne potwierdzenia odbioru pakietów, co poprawia niezawodność dostarczania danych przy niestabilnym linku.</li>
+            <li><strong><code>set agc.reset.interval 500</code>:</strong> Określa interwał (w milisekundach) resetowania automatycznej kontroli wzmocnienia (AGC) w układzie SX1262, zapobiegając zatykaniu odbiornika przez silne, bliskie sygnały.</li>
+            <li><strong><code>set guest.password ""</code>:</strong> Pozostawia puste hasło gościa dla konsoli, co ułatwia sąsiedzką diagnostykę i weryfikację stanu stacji bez zdradzania haseł administracyjnych.</li>
+            <li><strong><code>set flood.max 64</code>:</strong> Maksymalny dopuszczalny limit hopów (przeskoków) dla pakietów z przypisanym i dozwolonym zakresem regionalnym (np. zachod, pl-ds).</li>
+            <li><strong><code>set flood.max.unscoped 8</code>:</strong> Ograniczenie przesyłu dla ogólnego ruchu bez przypisanego zakresu (unscoped). Pakiety te mają mniejszy priorytet rozprzestrzeniania się.</li>
+        </ul>
+
+        <div class="alert-callout alert-callout-info">
+            <strong>💡 Wskazówka dotycząca unscoped:</strong>
+            Wartość limitu <code>flood.max.unscoped</code> można w pełni dostosować do swoich potrzeb poprzez uważną obserwację przychodzących wiadomości. Im mniejsza wartość, tym mniejsze obciążenie generuje ruch dla całej lokalnej sieci. Najlepiej, aby wartość ta nie przekraczała <strong>8</strong> (zalecany przedział to zazwyczaj 6 do 8).
+        </div>
+
+        <p>Komplet poleceń optymalizacyjnych do wklejenia w CLI:</p>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code># Włączenie trybu routingu i zalecanych ustawień
+set path.hash.mode 2
+set multi.acks 1
+set agc.reset.interval 500
+set guest.password ""
+set flood.max 64
+set flood.max.unscoped 8
+
+# Zapis i restart urządzenia
+write
+reboot</code></pre>
+
+        <h2>7. Profile Opóźnień Nadawania (txdelay)</h2>
+        <p>
+            Zróżnicowanie czasów opóźnienia nadawania (parametr <code>txdelay</code>) chroni sieć przed kolizjami radiowymi na tym samym obszarze (tzw. zjawisko ukrytego węzła).
+        </p>
+        <p>
+            Zasada jest prosta: im wyżej położony i lepiej słyszalny jest dany przemiennik, tym dłużej powinien odczekać przed retransmisją, aby pozwolić na nadanie stacjom położonym niżej. Liczba bezpośrednich sąsiadów również definiuje profil, do którego powinno się zakwalifikować dane urządzenie.
         </p>
 
         <table>
             <thead>
                 <tr>
                     <th>Profil wysokości</th>
-                    <th>Zastosowanie</th>
-                    <th>Parametry CLI</th>
+                    <th>Zastosowanie / Liczba sąsiadów</th>
+                    <th>Zalecane Opóźnienia CLI</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td><strong>WYSOKI / MASZT</strong></td>
-                    <td>Wysokie wieże, maszty kratownicowe, dachy wieżowców (daleki zasięg)</td>
+                    <td>Wysokie wieże, maszty kratownicowe, dachy wieżowców o bardzo dużym zasięgu.<br><strong>Sąsiedzi:</strong> powyżej 15 bezpośrednich sąsiadów.</td>
                     <td><code>set txdelay 1.5<br>set direct.txdelay 1.0<br>set rxdelay 3</code></td>
                 </tr>
                 <tr>
                     <td><strong>DACH / ROOFTOP</strong></td>
-                    <td>Klasyczny montaż anteny na dachu domu jednorodzinnego lub niskiego bloku</td>
+                    <td>Klasyczny montaż anteny na dachu domu jednorodzinnego lub niskiego bloku.<br><strong>Sąsiedzi:</strong> od 5 do 15 bezpośrednich sąsiadów.</td>
                     <td><code>set txdelay 0.8<br>set direct.txdelay 0.4<br>set rxdelay 3</code></td>
                 </tr>
                 <tr>
                     <td><strong>DOM / NISKI</strong></td>
-                    <td>Węzeł domowy, antena na parapecie lub wewnątrz pomieszczeń</td>
+                    <td>Węzeł domowy, antena na parapecie, balkonie lub wewnątrz pomieszczeń.<br><strong>Sąsiedzi:</strong> poniżej 5 bezpośrednich sąsiadów.</td>
                     <td><code>set txdelay 0.3<br>set direct.txdelay 0.1<br>set rxdelay 3</code></td>
                 </tr>
             </tbody>
         </table>
-
-        <h2>5. Limity Przeskoku (Hopy)</h2>
-        <p>
-            W celu zredukowania ogólnego szumu w eterze, ograniczamy ruch nieukierunkowany (unscoped) przy jednoczesnym zezwoleniu na szerokie przeskoki dla dobrze zaadresowanych pakietów regionalnych:
-        </p>
-        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code># Maksymalny limit hopów dla pakietów ze scope regionalnym (np. zachod, pl-ds)
-set flood.max 64
-
-# Ograniczenie przesyłu dla ruchu ogólnego bez scope (unscoped)
-set flood.max.unscoped 8</code></pre>
-
-        <div class="alert-callout alert-callout-info">
-            <strong>💡 Wskazówka dotycząca unscoped:</strong>
-            Wartość <code>flood.max.unscoped 8</code> jest wyjściowym standardem. Obserwuj chat w swojej okolicy i dostosuj ten parametr w przedziale <strong>6–8</strong> w zależności od tego, przez ile przeskoków (hopów) docierają do Ciebie pożądane pakiety.
-        </div>
-
-        <h2>6. Pozostała konfiguracja optymalizacyjna</h2>
-        <p>Wprowadź poniższe komendy w CLI, aby zoptymalizować pracę radia:</p>
-        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code># Włączenie trybu routingu i dwubajtowych path-hashów
-set path.hash.mode 1
-set multi.acks 1
-
-# Ochrona przed zatykaniem silnym sygnałem (resetowanie gainu SX1262)
-set agc.reset.interval 500
-
-# Pozostawienie pustego hasła gościa (ułatwia sąsiedzką diagnostykę)
-set guest.password ""
-
-# Zapis i restart urządzenia
-write
-reboot</code></pre>
     </div>
 
     <footer>
