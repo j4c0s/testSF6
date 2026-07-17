@@ -269,6 +269,11 @@
                     <td>Ruch wewnątrz województwa Dolnośląskiego.</td>
                 </tr>
                 <tr>
+                    <td><strong>#ds-test</strong></td>
+                    <td><code>pl-ds</code></td>
+                    <td>Dodatkowy kanał testowo-techniczny dla województwa Dolnośląskiego.</td>
+                </tr>
+                <tr>
                     <td><strong>#lubuskie</strong></td>
                     <td><code>pl-lb</code></td>
                     <td>Ruch wewnątrz województwa Lubuskiego.</td>
@@ -280,8 +285,13 @@
                 </tr>
                 <tr>
                     <td><strong>#wroclaw</strong></td>
-                    <td><code>wroclaw</code></td>
+                    <td><code>wroc</code></td>
                     <td>Ruch lokalny aglomeracji wrocławskiej. Całkowicie ignorowany poza regionem.</td>
+                </tr>
+                <tr>
+                    <td><strong>#wroc-tech</strong></td>
+                    <td><code>wroc</code></td>
+                    <td>Kanał techniczno-dyskusyjny aglomeracji wrocławskiej.</td>
                 </tr>
             </tbody>
         </table>
@@ -297,6 +307,7 @@ region put zachod
 region put pl-ds
 region put pl-lb
 region put wlkp
+region put wroc
 
 # Zezwolenie na floodowanie (rozsyłanie) pakietów z tych zakresów
 region allowf pl
@@ -304,6 +315,7 @@ region allowf zachod
 region allowf pl-ds
 region allowf pl-lb
 region allowf wlkp
+region allowf wroc
 
 # Zapisanie zmian w pamięci stałej
 region save
