@@ -25,6 +25,7 @@
             --border-success: #dcfce7;
             --accent-success: #15803d;
             --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
         }
 
         @media (prefers-color-scheme: dark) {
@@ -155,6 +156,7 @@
             cursor: pointer;
             font-weight: 600;
             transition: all 0.15s ease;
+            z-index: 10;
         }
 
         .btn-copy:hover {
@@ -174,6 +176,7 @@
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid var(--border);
+            vertical-align: middle;
         }
 
         th {
@@ -215,6 +218,29 @@
             color: var(--accent-warn);
         }
 
+        .advert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .advert-box {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .advert-box h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            color: var(--accent-primary);
+            font-weight: 800;
+        }
+
         footer {
             border-top: 1px solid var(--border);
             padding: 24px;
@@ -231,123 +257,246 @@
         <a href="index.html" class="nav-back">← Powrót do strony głównej</a>
 
         <h1>Instrukcja dla Repeaterów</h1>
-        <div class="subtitle">Parametry techniczne, zalecane limity przeskoku (flood) oraz profile opóźnień (txdelay) dla stacji bazowych na Zachodzie.</div>
+        <div class="subtitle">Krok po kroku: Pełna i zoptymalizowana konfiguracja stacji bazowych (przemienników) w regionie zachodnim.</div>
 
-        <h2>1. Kroki kontrolne przed montażem</h2>
-        <p>Przed umieszczeniem przemiennika wysoko na dachu lub maszcie, upewnij się, że stacja działa bez zarzutu:</p>
-        <ul>
-            <li><strong>Zasilanie i pobór prądu:</strong> Sprawdź obciążenie akumulatorów lub zasilacza buforowego.</li>
-            <li><strong>Poziom szumów (Noise Floor):</strong> Zmierz wskaźnik RSSI tła. Ciągły poziom szumów powyżej -110 dBm oznacza lokalne zakłócenia utrudniające odbiór. W eliminacji zakłóceń może pomóc filtr szczelinowy (cavity filter), szczególnie jeżeli w pobliżu znajdują się maszty telefonii komórkowej (BTS).</li>
-        </ul>
-
-        <h2>2. Nazewnictwo Repeaterów</h2>
-        <div class="alert-callout alert-callout-warn">
-            <strong>Dobra praktyka:</strong> Ze względu na brak sztywnego krajowego standardu, najważniejsze jest podanie <strong>lokalizacji pozwalającej łatwo określić położenie przemiennika</strong>. W nazwie nie musi znajdować się sztywne określenie "typ montażu", ani skrót "RPT", o ile nazwa jednoznacznie identyfikuje fizyczną lokalizację stacji bazowej.
+        <!-- Firmware upgrade notice -->
+        <div class="alert-callout alert-callout-info">
+            <strong>⚡ Ważna aktualizacja oprogramowania:</strong><br>
+            Gorąco zachęcamy do aktualizowania repeaterów do wersji oprogramowania <strong>minimum 1.16</strong>.
+            Repeatery poniżej wersji 1.14 nie przesyłają wiadomości 2 i 3-bajtowych. Ponadto, wersje poniżej 1.16 wysyłają wiadomości z preambułą 16 zamiast 32, co jest kluczowym elementem w dalszej optymalizacji i obniżaniu zużycia energii baterii.
         </div>
 
-        <h2>3. Rozgłoszenia (Adverty)</h2>
-        <p>
-            Aby zapobiec wysycaniu pasma częstymi, powtarzającymi się ramkami statusu, konfigurujemy rzadkie interwały advertów (lokalnych oraz globalnych):
-        </p>
-        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code># Status lokalny tylko do bezpośrednich sąsiadów co 4 godziny (240 minut)
-set advert.interval 240
+        <!-- CLI info notice -->
+        <div class="alert-callout alert-callout-warn">
+            <strong>💻 Wiersz poleceń (Command Line - CLI):</strong><br>
+            Na tej stronie znajdziesz również parametry i ustawienia, które można wprowadzić wyłącznie poprzez Wiersz poleceń (CLI) po zalogowaniu do repeatera.
+            <strong>Pamiętaj:</strong> po wysłaniu każdej komendy w CLI poczekaj na potwierdzenie jej wykonania. Komendy bez potwierdzenia zwrotnego mogły nie dotrzeć do repeatera.
+        </div>
 
-# Status globalny przekazywany floodem po sieci co 23 godziny (1380 minut, 0 hopów)
-set flood.advert.interval 23</code></pre>
+        <h2>1. Zasilanie i pobór prądu</h2>
         <p>
-            Powyższe konfiguracje oznaczają, że:
-            <ul>
-                <li><strong>Rozgłoszenie lokalne (<code>advert.interval</code>):</strong> Wysyłane jest co <strong>240 minut (czyli równe 4 godziny)</strong>. Służy wyłącznie bezpośrednim sąsiadom.</li>
-                <li><strong>Rozgłoszenie globalne (<code>flood.advert.interval</code>):</strong> Następuje co <strong>23 godziny</strong> (ze statusem 0 hopów) i rozprzestrzenia się po całej sieci jako flood.</li>
-            </ul>
+            Przed fizycznym montażem przemiennika na dachu lub maszcie należy bezwzględnie przetestować i zweryfikować jego bilans energetyczny:
+        </p>
+        <ul>
+            <li><strong>Obciążenie zasilania:</strong> Dokładnie sprawdź obciążenie akumulatorów lub zasilacza buforowego pod kątem stabilności napięcia pod obciążeniem nadawczym.</li>
+            <li><strong>Ładowanie solarem:</strong> W przypadku instalacji zasilanych panelami fotowoltaicznymi upewnij się, że panel słoneczny oraz kontroler ładowania są odpowiednio dobrane do pojemności akumulatora. Sprawdź, czy proces ładowania solarem efektywnie uzupełnia energię w ciągu dnia, zabezpieczając ciągłość pracy urządzenia w nocy i podczas gorszych warunków pogodowych.</li>
+            <li><strong>Poziom szumów (Noise Floor):</strong> Zmierz wskaźnik RSSI tła. Ciągły poziom szumów powyżej -110 dBm oznacza lokalne zakłócenia. W eliminacji zakłóceń z pobliskich masztów komórkowych (BTS) wysoce zalecane jest użycie filtra szczelinowego (cavity filter).</li>
+        </ul>
+
+        <h2>2. Nazewnictwo</h2>
+        <p>
+            Dla ułatwienia orientacji użytkowników w topologii sieci i ułatwienia im wycelowania anten, niezwykle istotne jest prawidłowe nazwanie stacji:
+        </p>
+        <ul>
+            <li><strong>Lokalizacja GPS:</strong> Dobrze jest ustawić przybliżoną lokalizację GPS, aby repeater pojawiał się na mapach sieci.</li>
+            <li><strong>Nazwa węzła:</strong> Ze względu na brak sztywnego krajowego standardu, najważniejsze jest podanie <strong>lokalizacji pozwalającej łatwo określić położenie przemiennika</strong>. W nazwie nie musi znajdować się sztywne określenie "typ montażu", ani skrót "RPT", o ile nazwa jednoznacznie identyfikuje fizyczną lokalizację stacji bazowej.</li>
+        </ul>
+
+        <h2>3. Informacja o właścicielu</h2>
+        <p>
+            Dla ułatwienia diagnostyki sieciowej i identyfikacji stacji bazowych, ustaw swoją nazwę companion (znak wywoławczy lub pseudonim), pod którą można się z Tobą bezpośrednio skontaktować w sieci. Ułatwi to odnalezienie właściciela w razie potrzeby kontaktu lub awarii:
+        </p>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set owner "TWÓJ_NICK_LUB_ZNAK"</code></pre>
+
+        <h2>4. Rozgłoszenia (Adverty)</h2>
+        <p>
+            Aby zapobiec niepotrzebnemu wysycaniu pasma częstymi i powtarzającymi się ramkami statusu, konfigurujemy rzadkie interwały advertów. Wizualnie dzielimy je na dwa osobne parametry:
         </p>
 
-        <h2>4. Synchronizacja Czasu (Clock Sync)</h2>
+        <div class="advert-grid">
+            <div class="advert-box">
+                <h4>Rozgłoszenie Zero-Hop (Lokalne)</h4>
+                <p>Służy wyłącznie bezpośrednim sąsiadom w zasięgu wzroku. Interwał podajemy w minutach: <strong>240 minut</strong> (czyli równe 4 godziny).</p>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set advert.interval 240</code></pre>
+            </div>
+            <div class="advert-box">
+                <h4>Rozgłoszenie Flood (Globalne)</h4>
+                <p>Rozprzestrzenia się po całej sieci jako flood ze statusem zero-hop. Interwał podajemy w godzinach: <strong>23 godziny</strong>.</p>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set flood.advert.interval 23</code></pre>
+            </div>
+        </div>
+
+        <h2>5. Lokalizacja</h2>
+        <p>
+            Dobrze jest ustawić przybliżoną lokalizację GPS w konfiguracji przemiennika. Dzięki temu repeater poprawnie pojawi się na mapach, a inni użytkownicy sieci będą mogli łatwiej wycelować swoje anteny kierunkowe w stronę Twojej stacji bazowej.
+        </p>
+
+        <h2>6. Zegar i jego synchronizowanie</h2>
         <p>
             Prawidłowy czas systemowy na repeaterze jest kluczowy dla właściwej interpretacji logów i poprawności routingu. Do synchronizacji czasu służy dedykowane polecenie:
         </p>
-        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code># Synchronizacja czasu z podłączonym urządzeniem / siecią
-clock sync</code></pre>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>clock sync</code></pre>
         <p>
-            <strong>Wskazówka:</strong> W przypadku, gdy czas systemowy na urządzeniu jest błędny i z jakiegoś powodu nie da się go cofnąć tradycyjną komendą, należy najpierw zresetować zegar systemowy poleceniem, a następnie wykonać synchronizację:
+            <strong>Wskazówka przy problemach z czasem wstecz:</strong> W przypadku, gdy czas systemowy na urządzeniu jest błędny i nie da się go cofnąć tradycyjną komendą, należy najpierw zresetować zegar systemowy poleceniem, a następnie wykonać synchronizację:
         </p>
-        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code># Reset zegara systemowego przy problemach z synchronizacją wstecz
-clkreboot
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>clkreboot</code></pre>
+        <p>Po restarcie zegara wykonaj ponownie synchronizację czasu:</p>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>clock sync</code></pre>
 
-# Następnie ponowna synchronizacja czasu
-clock sync</code></pre>
-
-        <h2>5. Ustawienia Właściciela i Tożsamości</h2>
+        <h2>7. Hasło gościa (Guest)</h2>
         <p>
-            Dla ułatwienia diagnostyki sieciowej i identyfikacji stacji bazowych, niezwykle przydatne jest poprawne ustawienie właściciela oraz opisu stacji:
+            Zaleca się pozostawienie hasła gościa jako puste dla konsoli. Umożliwia to sąsiadom bezpieczną diagnostykę i weryfikację stanu stacji bez konieczności zdradzania haseł administracyjnych:
         </p>
-        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code># Ustawienie identyfikatora / znaku wywoławczego właściciela przemiennika
-set owner "TWÓJ_ZNAK_LUB_NICK"</code></pre>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set guest.password ""</code></pre>
 
-        <h2>6. Pozostała konfiguracja optymalizacyjna</h2>
-        <p>Poniżej opisano dodatkowe parametry optymalizacyjne, które należy wprowadzić w CLI:</p>
+        <h2>8. Regiony i zakresy (Scopes)</h2>
+        <p>
+            Mechanizm Regional Scope służy do filtrowania i ograniczania ruchu radiowego w sieci, chroniąc Twój przemiennik przed zapchaniem przez niepotrzebne ramki z odległych województw. Dzięki tym regułom, Twój przemiennik pomoże w przekazywaniu lokalnego i krajowego ruchu sąsiadom, jednocześnie odrzucając zbędny szum.
+        </p>
+        <p>
+            Aby dodać dozwolone zakresy regionalne i zezwolić na ich przekazywanie dalej (floodowanie), wykonaj poniższe polecenia:
+        </p>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put pl
+region put zachod
+region put pl-ds
+region put pl-lb
+region put wlkp
+region put wroc
+region allowf pl
+region allowf zachod
+region allowf pl-ds
+region allowf pl-lb
+region allowf wlkp
+region allowf wroc
+region save</code></pre>
+        <p>
+            Pełną listę oraz taryfikator rekomendowanych kanałów i regionów w Polsce Zachodniej znajdziesz na dedykowanej podstronie: <a href="regiony.html">Regiony i Kanały</a>.
+        </p>
+
+        <h2>9. Włączenie przekazywania (Repeat Mode)</h2>
+        <p>
+            Aby repeater poprawnie przekazywał pakiety i wiadomości od innych użytkowników w sieci, musi mieć bezwzględnie włączoną funkcję **Repeat Mode**:
+        </p>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set repeat.mode on</code></pre>
+
+        <h2>10. Dodatkowe ustawienia CLI</h2>
+        <p>
+            Poniżej opisano zaawansowane parametry optymalizacyjne, które można skonfigurować tylko za pomocą CLI. Warto je zawsze sprawdzić lub nawet ustawić dla pewności po każdej aktualizacji oprogramowania (ponieważ zmiana firmware czasem przywraca domyślne parametry urządzenia i trzeba je ustawić ponownie):
+        </p>
 
         <ul>
+            <li><strong><code>set flood.max.advert 8</code>:</strong> Ogranicza zasięg przesyłanych advertów sieciowych.</li>
             <li><strong><code>set path.hash.mode 2</code>:</strong> Wymusza dwubajtowy tryb generowania skrótów ścieżek (path-hash), co znacząco zmniejsza ryzyko kolizji identyfikatorów tras w większych sieciach.</li>
             <li><strong><code>set multi.acks 1</code>:</strong> Aktywuje wielokrotne potwierdzenia odbioru pakietów, co poprawia niezawodność dostarczania danych przy niestabilnym linku.</li>
             <li><strong><code>set agc.reset.interval 500</code>:</strong> Określa interwał (w milisekundach) resetowania automatycznej kontroli wzmocnienia (AGC) w układzie SX1262, zapobiegając zatykaniu odbiornika przez silne, bliskie sygnały.</li>
-            <li><strong><code>set guest.password ""</code>:</strong> Pozostawia puste hasło gościa dla konsoli, co ułatwia sąsiedzką diagnostykę i weryfikację stanu stacji bez zdradzania haseł administracyjnych.</li>
             <li><strong><code>set flood.max 64</code>:</strong> Maksymalny dopuszczalny limit hopów (przeskoków) dla pakietów z przypisanym i dozwolonym zakresem regionalnym (np. zachod, pl-ds).</li>
             <li><strong><code>set flood.max.unscoped 8</code>:</strong> Ograniczenie przesyłu dla ogólnego ruchu bez przypisanego zakresu (unscoped). Pakiety te mają mniejszy priorytet rozprzestrzeniania się.</li>
         </ul>
 
         <div class="alert-callout alert-callout-info">
-            <strong>💡 Wskazówka dotycząca unscoped:</strong>
-            Wartość limitu <code>flood.max.unscoped</code> można w pełni dostosować do swoich potrzeb poprzez uważną obserwację przychodzących wiadomości. Im mniejsza wartość, tym mniejsze obciążenie generuje ruch dla całej lokalnej sieci. Najlepiej, aby wartość ta nie przekraczała <strong>8</strong> (zalecany przedział to zazwyczaj 6 do 8).
+            <strong>💡 Wskazówka dotycząca unscoped:</strong><br>
+            Wartość limitu <code>flood.max.unscoped</code> można w pełni dostosować do swoich potrzeb poprzez uważną obserwację przychodzących wiadomości. Im mniejsza wartość, tym mniejsze obciążenie generuje ruch dla całej lokalnej sieci. Najlepiej, aby wartość ta nie przekraczała <strong>8</strong>.
         </div>
 
-        <p>Komplet poleceń optymalizacyjnych do wklejenia w CLI:</p>
-        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code># Włączenie trybu routingu i zalecanych ustawień
-set path.hash.mode 2
-set multi.acks 1
-set agc.reset.interval 500
-set guest.password ""
-set flood.max 64
-set flood.max.unscoped 8
+        <p><strong>Czułość odbiornika (RxGain) oraz zasilanie:</strong></p>
+        <ul>
+            <li><strong><code>set radio.rxgain on/off</code></strong> oraz <strong><code>set radio.fem.rxgain on/off</code></strong>:
+                Opcje te kontrolują wewnętrzne i zewnętrzne wzmocnienie odbioru sygnału radiowego (LNA / Front-End Module).
+                <br><em>Kiedy warto włączyć:</em> Gdy repeater jest zamontowany w miejscu o bardzo niskim poziomie szumów (czyste tło radiowe), aby wyłapywać skrajnie odległe i słabe sygnały.
+                <br><em>Kiedy wyłączyć (off):</em> Gdy urządzenie pracuje w pobliżu masztów GSM/BTS lub innych silnych źródeł zakłóceń – dodatkowe wzmocnienie może przesterować odbiornik.
+                <br><strong>Uwaga:</strong> Włączenie opcji rxgain zwiększa pobór prądu stacji, co należy uwzględnić przy zasilaniu bateryjnym!
+            </li>
+            <li><strong><code>powersaving on/off</code></strong>:
+                Bardzo ważna funkcja dla posiadaczy repeaterów z zasilaniem bateryjnym/solarnym. Włączenie tej opcji usypia radio w momentach braku aktywności, co pozwala zaoszczędzić olbrzymie ilości energii.
+                <br>Dla głębokiej optymalizacji zużycia baterii niezwykle przydatny może okazać się również specjalny, zoptymalizowany firmware od IoTThinks EasySkyMesh:
+                <a href="https://github.com/IoTThinks/EasySkyMesh/releases" target="_blank" rel="noopener noreferrer">https://github.com/IoTThinks/EasySkyMesh/releases</a>.
+            </li>
+        </ul>
 
-# Zapis i restart urządzenia
-write
-reboot</code></pre>
-
-        <h2>7. Profile Opóźnień Nadawania (txdelay)</h2>
+        <p><strong>Ustawienia opóźnień nadawania (txdelay):</strong></p>
         <p>
             Zróżnicowanie czasów opóźnienia nadawania (parametr <code>txdelay</code>) chroni sieć przed kolizjami radiowymi na tym samym obszarze (tzw. zjawisko ukrytego węzła).
-        </p>
-        <p>
-            Zasada jest prosta: im wyżej położony i lepiej słyszalny jest dany przemiennik, tym dłużej powinien odczekać przed retransmisją, aby pozwolić na nadanie stacjom położonym niżej. Liczba bezpośrednich sąsiadów również definiuje profil, do którego powinno się zakwalifikować dane urządzenie.
+            Im wyżej położony i lepiej słyszalny jest dany przemiennik, tym dłużej powinien odczekać przed retransmisją, pozwalając na nadanie stacjom położonym niżej.
         </p>
 
         <table>
             <thead>
                 <tr>
-                    <th>Profil wysokości</th>
-                    <th>Zastosowanie / Liczba sąsiadów</th>
-                    <th>Zalecane Opóźnienia CLI</th>
+                    <th>Profil wysokości / Sąsiedzi</th>
+                    <th>Opis zastosowania</th>
+                    <th>Zalecane Opóźnienia (CLI)</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td><strong>WYSOKI / MASZT</strong></td>
-                    <td>Wysokie wieże, maszty kratownicowe, dachy wieżowców o bardzo dużym zasięgu.<br><strong>Sąsiedzi:</strong> powyżej 15 bezpośrednich sąsiadów.</td>
-                    <td><code>set txdelay 1.5<br>set direct.txdelay 1.0<br>set rxdelay 3</code></td>
+                    <td><strong>WYSOKI / MASZT</strong><br><small>Sąsiedzi: &gt;15 bezpośrednich</small></td>
+                    <td>Wysokie wieże, maszty kratownicowe, dachy wieżowców o bardzo dużym zasięgu.</td>
+                    <td>
+                        <pre style="margin: 0; padding: 8px;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set txdelay 1.5
+set direct.txdelay 1.0
+set rxdelay 3</code></pre>
+                    </td>
                 </tr>
                 <tr>
-                    <td><strong>DACH / ROOFTOP</strong></td>
-                    <td>Klasyczny montaż anteny na dachu domu jednorodzinnego lub niskiego bloku.<br><strong>Sąsiedzi:</strong> od 5 do 15 bezpośrednich sąsiadów.</td>
-                    <td><code>set txdelay 0.8<br>set direct.txdelay 0.4<br>set rxdelay 3</code></td>
+                    <td><strong>DACH / ROOFTOP</strong><br><small>Sąsiedzi: 5 do 15</small></td>
+                    <td>Klasyczny montaż anteny na dachu domu jednorodzinnego lub niskiego bloku.</td>
+                    <td>
+                        <pre style="margin: 0; padding: 8px;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set txdelay 0.8
+set direct.txdelay 0.4
+set rxdelay 3</code></pre>
+                    </td>
                 </tr>
                 <tr>
-                    <td><strong>DOM / NISKI</strong></td>
-                    <td>Węzeł domowy, antena na parapecie, balkonie lub wewnątrz pomieszczeń.<br><strong>Sąsiedzi:</strong> poniżej 5 bezpośrednich sąsiadów.</td>
-                    <td><code>set txdelay 0.3<br>set direct.txdelay 0.1<br>set rxdelay 3</code></td>
+                    <td><strong>DOM / NISKI</strong><br><small>Sąsiedzi: &lt;5 bezpośrednich</small></td>
+                    <td>Węzeł domowy, antena na parapecie, balkonie lub wewnątrz pomieszczeń.</td>
+                    <td>
+                        <pre style="margin: 0; padding: 8px;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set txdelay 0.3
+set direct.txdelay 0.1
+set rxdelay 3</code></pre>
+                    </td>
                 </tr>
             </tbody>
         </table>
+
+        <h2>11. Podsumowanie: Kompletna lista domyślnych komend CLI</h2>
+        <p>
+            Poniżej zebraliśmy wszystkie rekomendowane i standardowe komendy konfiguracji repeatera na Zachodzie w jednym miejscu. Możesz skopiować całą listę lub poszczególne parametry do wdrożenia w konsoli. Pamiętaj, aby po wszystkim zrestartować urządzenie:
+        </p>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj całość</button><code># 1. Tożsamość i kontakt (wprowadź swój własny nick)
+set owner "TWÓJ_NICK_LUB_ZNAK"
+
+# 2. Czasy rozgłoszeń (adverty)
+set advert.interval 240
+set flood.advert.interval 23
+set flood.max.advert 8
+
+# 3. Synchronizacja zegara
+clock sync
+
+# 4. Hasło gościa (puste)
+set guest.password ""
+
+# 5. Tryb przekazywania (Repeat Mode)
+set repeat.mode on
+
+# 6. Optymalizacja routingu i parametrów LoRa
+set path.hash.mode 2
+set multi.acks 1
+set agc.reset.interval 500
+set flood.max 64
+set flood.max.unscoped 8
+
+# 7. Konfiguracja zakresów regionalnych (Scopes)
+region put pl
+region put zachod
+region put pl-ds
+region put pl-lb
+region put wlkp
+region put wroc
+region allowf pl
+region allowf zachod
+region allowf pl-ds
+region allowf pl-lb
+region allowf wlkp
+region allowf wroc
+region save
+
+# 8. Opcjonalne oszczędzanie energii (odkomentuj jeśli zasilasz bateryjnie)
+# powersaving on
+
+# Na koniec zrestartuj urządzenie (komenda "write" nie występuje w urządzeniach):
+reboot</code></pre>
+
     </div>
 
     <footer>
