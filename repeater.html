@@ -263,6 +263,7 @@
         <div class="alert-callout alert-callout-info">
             <strong>⚡ Ważna aktualizacja oprogramowania:</strong><br>
             Gorąco zachęcamy do aktualizowania repeaterów do wersji oprogramowania <strong>minimum 1.16</strong>.
+            Oficjalne wydania można pobrać bezpośrednio ze strony <a href="https://meshcore.io" target="_blank" rel="noopener noreferrer">meshcore.io</a>, a alternatywne i zoptymalizowane wersje oprogramowania od <a href="https://github.com/IoTThinks/EasySkyMesh/releases" target="_blank" rel="noopener noreferrer">IoTThinks</a> są dostępne na GitHubie.<br><br>
             Repeatery poniżej wersji 1.14 nie przesyłają wiadomości 2 i 3-bajtowych. Ponadto, wersje poniżej 1.16 wysyłają wiadomości z preambułą 16 zamiast 32, co jest kluczowym elementem w dalszej optymalizacji i obniżaniu zużycia energii baterii.
         </div>
 
@@ -344,7 +345,18 @@
             Mechanizm Regional Scope służy do filtrowania i ograniczania ruchu radiowego w sieci, chroniąc Twój przemiennik przed zapchaniem przez niepotrzebne ramki z odległych województw. Dzięki tym regułom, Twój przemiennik pomoże w przekazywaniu lokalnego i krajowego ruchu sąsiadom, jednocześnie odrzucając zbędny szum.
         </p>
         <p>
-            Aby dodać dozwolone zakresy regionalne i zezwolić na ich przekazywanie dalej (floodowanie), wykonaj poniższe polecenia:
+            <strong>Ważna uwaga dotycząca kompatybilności:</strong> Dodanie regionów (scopes) do konfiguracji repeatera <strong>nie powoduje żadnych problemów z przesyłaniem dotychczasowych wiadomości bez ustawionego zakresu (unscoped)</strong>. Urządzenie nadal będzie poprawnie przekazywać tradycyjny ruch, ale dodatkowo zyska możliwość odbierania i przesyłania dalej wiadomości z przypisanym, konkretnym zakresem regionalnym.
+        </p>
+        <p>
+            <strong>Ustawienie domyślnego regionu (default.region):</strong><br>
+            Komenda <code>set default.region [scope]</code> (np. <code>set default.region zachod</code>) służy do zdefiniowania domyślnego zakresu terytorialnego. Przypisuje ona wybrany region do wszystkich pakietów generowanych bezpośrednio przez sam repeater (np. jego własne statusy i telemetryczne rozgłoszenia) oraz do pakietów, które dotarły do niego jako "czyste" (bez przypisanego żadnego scope'u). Dzięki temu pakiety te zostaną automatycznie "oznakowane" odpowiednim regionem i będą przekazywane zgodnie z polityką filtracji.
+        </p>
+        <div class="alert-callout alert-callout-warn">
+            <strong>🌍 Zasada dobierania regionów:</strong><br>
+            Pamiętaj, aby do konfiguracji repeatera dodawać <strong>wyłącznie regiony odpowiadające Twojemu własnemu województwu</strong> (voivodeship) oraz regionom nadrzędnym (jak krajowy <code>pl</code> czy zbiorczy <code>zachod</code>). Wyjątkiem są sytuacje, gdy przemiennik znajduje się blisko granicy województw lub pełni rolę fizycznego mostu (bridge) przenoszącego ruch pomiędzy sąsiadującymi regionami.
+        </div>
+        <p>
+            Aby dodać dozwolone zakresy regionalne, ustawić domyślny region oraz zezwolić na ich przekazywanie dalej (floodowanie), wykonaj poniższe polecenia w CLI:
         </p>
         <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put pl
 region put zachod
@@ -358,6 +370,7 @@ region allowf pl-ds
 region allowf pl-lb
 region allowf wlkp
 region allowf wroc
+set default.region zachod
 region save</code></pre>
         <p>
             Pełną listę oraz taryfikator rekomendowanych kanałów i regionów w Polsce Zachodniej znajdziesz na dedykowanej podstronie: <a href="regiony.html">Regiony i Kanały</a>.
@@ -489,6 +502,7 @@ region allowf pl-ds
 region allowf pl-lb
 region allowf wlkp
 region allowf wroc
+set default.region zachod
 region save
 
 # 8. Opcjonalne oszczędzanie energii (odkomentuj jeśli zasilasz bateryjnie)
