@@ -224,6 +224,62 @@
             margin-bottom: 0;
         }
 
+        .radio-params-box {
+            border-left: 4px solid var(--accent-primary);
+            margin-bottom: 40px;
+        }
+
+        .params-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .param-item {
+            background-color: var(--bg-page);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .param-label {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+
+        .param-value {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--accent-primary);
+        }
+
+        /* Inactive cards */
+        .guide-card.inactive {
+            opacity: 0.55;
+            cursor: not-allowed;
+            pointer-events: none;
+            background-color: rgba(0, 0, 0, 0.01);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .guide-card.inactive {
+                background-color: rgba(255, 255, 255, 0.01);
+            }
+        }
+
+        .guide-card.inactive:hover {
+            transform: none !important;
+            border-color: var(--border) !important;
+        }
+
         footer {
             border-top: 1px solid var(--border);
             background-color: var(--bg-card);
@@ -253,24 +309,51 @@
         <span class="tagline">POLSKA ZACHODNIA / LORA.868</span>
         <h1>Zalecane ustawienia</h1>
         <p>
-            Konkretne i czytelne instrukcje konfiguracyjne dla poszczególnych urządzeń w regionie zachodnim (Dolny Śląsk, Lubuskie, Wielkopolska). Wybierz urządzenie, aby pobrać parametry.
+            Konkretne i czytelne instrukcje konfiguracyjne dla poszczególnych urządzeń w regionie zachodnim (Dolny Śląsk, Lubuskie, Wielkopolska).
         </p>
     </section>
 
     <main class="main-content">
+        <!-- Radio Parameters Section -->
+        <div class="info-box radio-params-box">
+            <h3>Podstawowe Parametry Radia</h3>
+            <p>Poniższe wartości są standardem dla całego regionie zachodnim i muszą być skonfigurowane w każdym urządzeniu:</p>
+            <div class="params-grid">
+                <div class="param-item">
+                    <span class="param-label">Częstotliwość</span>
+                    <span class="param-value">869.618 MHz</span>
+                </div>
+                <div class="param-item">
+                    <span class="param-label">Szerokość pasma</span>
+                    <span class="param-value">62.5 kHz</span>
+                </div>
+                <div class="param-item">
+                    <span class="param-label">Spread Factor</span>
+                    <span class="param-value">SF7 / SF8 / SF9</span>
+                </div>
+                <div class="param-item">
+                    <span class="param-label">Coding Rate</span>
+                    <span class="param-value">CR5 (Coding Rate 5)</span>
+                </div>
+            </div>
+        </div>
+
         <h2 class="section-title">Instrukcje dla urządzeń</h2>
+        <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem;">
+            Wybierz urządzenie, aby przejść do instrukcji konfiguracji. Uwaga: obecnie skupiamy się na optymalizacji repeaterów (pozostałe instrukcje są chwilowo nieaktywne).
+        </p>
 
         <div class="guides-grid">
 
-            <a href="companion.html" class="guide-card">
+            <a href="companion.html" class="guide-card inactive" onclick="return false;">
                 <div>
-                    <div class="card-badge">TELEFON / URZĄDZENIE KLIENCKIE</div>
-                    <h3 class="card-title">Companion</h3>
+                    <div class="card-badge" style="color: var(--text-muted);">TELEFON / URZĄDZENIE KLIENCKIE</div>
+                    <h3 class="card-title" style="color: var(--text-muted);">Companion</h3>
                     <p class="card-description">
-                        Konfiguracja aplikacji Android, parowanie Bluetooth, aktywacja prefixu 3-bajtowego oraz zasady nazewnictwa węzłów bez GPS.
+                        Konfiguracja aplikacji Android, parowanie Bluetooth, aktywacja prefixu 3-bajtowego oraz zasady nazewnictwa węzłów bez GPS. (Chwilowo nieaktywne)
                     </p>
                 </div>
-                <span class="card-link">otwórz instrukcję →</span>
+                <span class="card-link" style="color: var(--text-muted);">instrukcja niedostępna →</span>
             </a>
 
             <a href="repeater.html" class="guide-card">
@@ -278,24 +361,28 @@
                     <div class="card-badge">PRZEMIENNIK / STACJA BAZOWA</div>
                     <h3 class="card-title">Repeater</h3>
                     <p class="card-description">
-                        Optymalizacja czasów rozgłoszeń (adverty), profile delayów dopasowane do wysokości montażu oraz limity przeskoku (flood.max).
+                        Optymalizacja czasów rozgłoszeń (advertów), profile delayów dopasowane do wysokości montażu oraz limity przeskoku (flood.max).
                     </p>
                 </div>
                 <span class="card-link">otwórz instrukcję →</span>
             </a>
 
-            <a href="roomserver.html" class="guide-card">
+            <a href="roomserver.html" class="guide-card inactive" onclick="return false;">
                 <div>
-                    <div class="card-badge">STACJA NASŁUCHOWA / ESP32</div>
-                    <h3 class="card-title">RoomServer / Observer</h3>
+                    <div class="card-badge" style="color: var(--text-muted);">STACJA NASŁUCHOWA / ESP32</div>
+                    <h3 class="card-title" style="color: var(--text-muted);">RoomServer / Observer</h3>
                     <p class="card-description">
-                        Jak uruchomić bezgłośny nasłuch z przesyłaniem danych przez Wi-Fi bezpośrednio do systemów telemetrycznych letsmesh i cma.pl.
+                        Jak uruchomić bezgłośny nasłuch z przesyłaniem danych przez Wi-Fi bezpośrednio do systemów telemetrycznych letsmesh i cma.pl. (Chwilowo nieaktywne)
                     </p>
                 </div>
-                <span class="card-link">otwórz instrukcję →</span>
+                <span class="card-link" style="color: var(--text-muted);">instrukcja niedostępna →</span>
             </a>
 
-            <a href="regiony.html" class="guide-card">
+        </div>
+
+        <h2 class="section-title" style="margin-top: 40px;">Kanały i Regiony</h2>
+        <div class="guides-grid">
+            <a href="regiony.html" class="guide-card" style="grid-column: 1 / -1;">
                 <div>
                     <div class="card-badge">ZAKRESY I KANAŁY</div>
                     <h3 class="card-title">Regiony i Kanały</h3>
@@ -305,10 +392,9 @@
                 </div>
                 <span class="card-link">otwórz instrukcję →</span>
             </a>
-
         </div>
 
-        <div class="info-box">
+        <div class="info-box" style="margin-top: 40px;">
             <h3>Standard Częstotliwości</h3>
             <p>
                 Wszystkie węzły w regionie zachodnim pracują wyłącznie w europejskim pasmie <strong>868 MHz</strong> (EU/UK Narrow, dedykowana częstotliwość <strong>869.618 MHz</strong>). Prosimy o ścisłe przestrzeganie tej częstotliwości, aby zachować pełną spójność sieci radiowej.
