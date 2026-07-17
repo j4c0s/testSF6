@@ -287,6 +287,8 @@
         <div class="alert-callout alert-callout-info">
             <strong>⚡ Ważna aktualizacja oprogramowania:</strong><br>
             Gorąco zachęcamy do aktualizowania repeaterów do wersji oprogramowania <strong>minimum 1.16</strong>.
+            Oficjalne oprogramowanie i instrukcje znajdziesz na stronie <a href="https://meshcore.io" target="_blank" rel="noopener noreferrer">meshcore.io</a>, a specjalny, zoptymalizowany pod kątem oszczędzania energii firmware od IoTThinks pobierzesz bezpośrednio z <a href="https://github.com/IoTThinks/EasySkyMesh/releases" target="_blank" rel="noopener noreferrer">github.com/IoTThinks/EasySkyMesh/releases</a>.
+            <br><br>
             Repeatery poniżej wersji 1.14 nie przesyłają wiadomości 2 i 3-bajtowych. Ponadto, wersje poniżej 1.16 wysyłają wiadomości z preambułą 16 zamiast 32, co jest kluczowym elementem w dalszej optymalizacji i obniżaniu zużycia energii baterii.
         </div>
 
@@ -324,7 +326,7 @@
 
         <h2>4. Rozgłoszenia (Adverty)</h2>
         <p>
-            Aby zapobiec niepotrzebnemu wysycaniu pasma częstymi i powtarzającymi się ramkami statusu, konfigurujemy rzadkie interwały advertów. Wizualnie dzielimy je na dwa osobne parametry:
+            Aby zapobiec niepotrzebnemu wysycaniu pasma częstych i powtarzających się ramkami statusu, konfigurujemy rzadkie interwały advertów. Wizualnie dzielimy je na dwa osobne parametry:
         </p>
 
         <div class="advert-grid">
@@ -366,6 +368,12 @@
         <h2>8. Regiony i zakresy (Scopes)</h2>
         <p>
             Mechanizm Regional Scope służy do filtrowania i ograniczania ruchu radiowego w sieci, chroniąc Twój przemiennik przed zapchaniem przez niepotrzebne ramki z odległych województw.
+        </p>
+        <div class="alert-callout alert-callout-info" style="margin: 16px 0;">
+            <strong>ℹ️ Brak problemów z dotychczasowymi wiadomościami:</strong><br>
+            Dodanie regionów (zakresów) do repeatera <strong>nie powoduje żadnych problemów</strong> z przesyłaniem dotychczasowych standardowych wiadomości (bez ustawionego scope). Twój przemiennik nadal będzie je bez problemu przekazywał. Dodanie zakresów aktywuje natomiast dodatkowo możliwość bezkonfliktowego przesyłania i routowania wiadomości z ustawionym tagiem terytorialnym (scope).
+        </div>
+        <p>
             <strong>Bardzo ważna zasada:</strong> należy dodawać wyłącznie regiony (zakresy) dla <strong>swojego województwa</strong>. Wyjątkiem od tej reguły są sytuacje, w których repeater znajduje się fizycznie na granicy województw lub aktywnie pośredniczy/łączy ruch pomiędzy sąsiednimi województwami.
         </p>
         <p>
@@ -390,6 +398,12 @@
 
         <p><em>Krok 3: Zapisanie konfiguracji regionów:</em></p>
         <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region save</code></pre>
+
+        <p><strong>Ustawienie domyślnego regionu repeatera (Default Region):</strong></p>
+        <p>
+            Zaleca się ustawienie domyślnego regionu (np. <code>zachod</code>) na repeaterze. Ta komenda definiuje domyślny zakres terytorialny (scope), który będzie automatycznie przypisywany do pakietów generowanych bezpośrednio przez repeater (np. jego własne statusy, telemetria) oraz do pakietów bez zdefiniowanego scope przychodzących z sieci lokalnej. Dzięki temu ruch ten jest automatycznie ograniczany i odpowiednio kierowany w ramach określonych barier regionalnych:
+        </p>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set default.region zachod</code></pre>
 
         <p>
             Po szczegółowe wyjaśnienie działania zakresów regionalnych oraz pełną, aktualną tabelę zalecanych terytoriów przejdź do dedykowanej strony: <a href="regiony.html">Regiony i Kanały</a>.
@@ -568,11 +582,15 @@
                 <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf zachod</code></pre>
             </li>
             <li>
-                <span class="desc">17. Zapisanie ustawień regionów:</span>
+                <span class="desc">17. Ustawienie domyślnego regionu (default.region):</span>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set default.region zachod</code></pre>
+            </li>
+            <li>
+                <span class="desc">18. Zapisanie ustawień regionów:</span>
                 <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region save</code></pre>
             </li>
             <li>
-                <span class="desc">18. Ponowne uruchomienie urządzenia (reboot):</span>
+                <span class="desc">19. Ponowne uruchomienie urządzenia (reboot):</span>
                 <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>reboot</code></pre>
             </li>
         </ul>
