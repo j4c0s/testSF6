@@ -131,9 +131,9 @@
             background-color: var(--bg-page);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 16px;
+            padding: 12px 16px;
             overflow-x: auto;
-            margin: 16px 0;
+            margin: 8px 0;
             position: relative;
         }
 
@@ -145,7 +145,8 @@
 
         .btn-copy {
             position: absolute;
-            top: 10px;
+            top: 50%;
+            transform: translateY(-50%);
             right: 10px;
             background-color: var(--bg-card);
             border: 1px solid var(--border);
@@ -239,6 +240,29 @@
             font-size: 1.1rem;
             color: var(--accent-primary);
             font-weight: 800;
+        }
+
+        /* Style adjust for list blocks with code */
+        .summary-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .summary-list li {
+            margin-bottom: 16px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .summary-list .desc {
+            display: block;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: var(--text-main);
         }
 
         footer {
@@ -341,26 +365,34 @@
 
         <h2>8. Regiony i zakresy (Scopes)</h2>
         <p>
-            Mechanizm Regional Scope służy do filtrowania i ograniczania ruchu radiowego w sieci, chroniąc Twój przemiennik przed zapchaniem przez niepotrzebne ramki z odległych województw. Dzięki tym regułom, Twój przemiennik pomoże w przekazywaniu lokalnego i krajowego ruchu sąsiadom, jednocześnie odrzucając zbędny szum.
+            Mechanizm Regional Scope służy do filtrowania i ograniczania ruchu radiowego w sieci, chroniąc Twój przemiennik przed zapchaniem przez niepotrzebne ramki z odległych województw.
+            <strong>Bardzo ważna zasada:</strong> należy dodawać wyłącznie regiony (zakresy) dla <strong>swojego województwa</strong>. Wyjątkiem od tej reguły są sytuacje, w których repeater znajduje się fizycznie na granicy województw lub aktywnie pośredniczy/łączy ruch pomiędzy sąsiednimi województwami.
         </p>
         <p>
-            Aby dodać dozwolone zakresy regionalne i zezwolić na ich przekazywanie dalej (floodowanie), wykonaj poniższe polecenia:
+            Zakresy regionalne dodajemy do pamięci repeatera za pomocą poleceń <code>region put [nazwa]</code> oraz pozwalamy na ich floodowanie <code>region allowf [nazwa]</code>. Wprowadzaj je pojedynczo w CLI:
         </p>
-        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put pl
-region put zachod
-region put pl-ds
-region put pl-lb
-region put wlkp
-region put wroc
-region allowf pl
-region allowf zachod
-region allowf pl-ds
-region allowf pl-lb
-region allowf wlkp
-region allowf wroc
-region save</code></pre>
+
+        <p><em>Krok 1: Dodanie dopuszczalnych zakresów (wybierz te właściwe dla swojego województwa):</em></p>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put pl</code></pre>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put zachod</code></pre>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put pl-ds</code></pre>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put pl-lb</code></pre>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put wlkp</code></pre>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put wroc</code></pre>
+
+        <p><em>Krok 2: Zezwolenie na floodowanie dla wybranych zakresów:</em></p>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf pl</code></pre>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf zachod</code></pre>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf pl-ds</code></pre>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf pl-lb</code></pre>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf wlkp</code></pre>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf wroc</code></pre>
+
+        <p><em>Krok 3: Zapisanie konfiguracji regionów:</em></p>
+        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region save</code></pre>
+
         <p>
-            Pełną listę oraz taryfikator rekomendowanych kanałów i regionów w Polsce Zachodniej znajdziesz na dedykowanej podstronie: <a href="regiony.html">Regiony i Kanały</a>.
+            Po szczegółowe wyjaśnienie działania zakresów regionalnych oraz pełną, aktualną tabelę zalecanych terytoriów przejdź do dedykowanej strony: <a href="regiony.html">Regiony i Kanały</a>.
         </p>
 
         <h2>9. Włączenie przekazywania (Repeat Mode)</h2>
@@ -375,12 +407,24 @@ region save</code></pre>
         </p>
 
         <ul>
-            <li><strong><code>set flood.max.advert 8</code>:</strong> Ogranicza zasięg przesyłanych advertów sieciowych.</li>
-            <li><strong><code>set path.hash.mode 2</code>:</strong> Wymusza dwubajtowy tryb generowania skrótów ścieżek (path-hash), co znacząco zmniejsza ryzyko kolizji identyfikatorów tras w większych sieciach.</li>
-            <li><strong><code>set multi.acks 1</code>:</strong> Aktywuje wielokrotne potwierdzenia odbioru pakietów, co poprawia niezawodność dostarczania danych przy niestabilnym linku.</li>
-            <li><strong><code>set agc.reset.interval 500</code>:</strong> Określa interwał (w milisekundach) resetowania automatycznej kontroli wzmocnienia (AGC) w układzie SX1262, zapobiegając zatykaniu odbiornika przez silne, bliskie sygnały.</li>
-            <li><strong><code>set flood.max 64</code>:</strong> Maksymalny dopuszczalny limit hopów (przeskoków) dla pakietów z przypisanym i dozwolonym zakresem regionalnym (np. zachod, pl-ds).</li>
-            <li><strong><code>set flood.max.unscoped 8</code>:</strong> Ograniczenie przesyłu dla ogólnego ruchu bez przypisanego zakresu (unscoped). Pakiety te mają mniejszy priorytet rozprzestrzeniania się.</li>
+            <li><strong>Limit rozgłoszeń advertów:</strong>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set flood.max.advert 8</code></pre>
+            </li>
+            <li><strong>Dwubajtowy tryb generowania skrótów ścieżek (path-hash):</strong>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set path.hash.mode 2</code></pre>
+            </li>
+            <li><strong>Wielokrotne potwierdzenia odbioru (multi-acks):</strong>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set multi.acks 1</code></pre>
+            </li>
+            <li><strong>Resetowanie AGC w układzie SX1262:</strong>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set agc.reset.interval 500</code></pre>
+            </li>
+            <li><strong>Maksymalny limit hopów regionalnych:</strong>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set flood.max 64</code></pre>
+            </li>
+            <li><strong>Maksymalny limit hopów unscoped:</strong>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set flood.max.unscoped 8</code></pre>
+            </li>
         </ul>
 
         <div class="alert-callout alert-callout-info">
@@ -395,10 +439,14 @@ region save</code></pre>
                 <br><em>Kiedy warto włączyć:</em> Gdy repeater jest zamontowany w miejscu o bardzo niskim poziomie szumów (czyste tło radiowe), aby wyłapywać skrajnie odległe i słabe sygnały.
                 <br><em>Kiedy wyłączyć (off):</em> Gdy urządzenie pracuje w pobliżu masztów GSM/BTS lub innych silnych źródeł zakłóceń – dodatkowe wzmocnienie może przesterować odbiornik.
                 <br><strong>Uwaga:</strong> Włączenie opcji rxgain zwiększa pobór prądu stacji, co należy uwzględnić przy zasilaniu bateryjnym!
+                <br>Wprowadź odpowiednią wartość dla swojego urządzenia:
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set radio.rxgain on</code></pre>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set radio.fem.rxgain on</code></pre>
             </li>
             <li><strong><code>powersaving on/off</code></strong>:
                 Bardzo ważna funkcja dla posiadaczy repeaterów z zasilaniem bateryjnym/solarnym. Włączenie tej opcji usypia radio w momentach braku aktywności, co pozwala zaoszczędzić olbrzymie ilości energii.
-                <br>Dla głębokiej optymalizacji zużycia baterii niezwykle przydatny może okazać się również specjalny, zoptymalizowany firmware od IoTThinks EasySkyMesh:
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>powersaving on</code></pre>
+                Dla głębokiej optymalizacji zużycia baterii niezwykle przydatny może okazać się również specjalny, zoptymalizowany firmware od IoTThinks EasySkyMesh:
                 <a href="https://github.com/IoTThinks/EasySkyMesh/releases" target="_blank" rel="noopener noreferrer">https://github.com/IoTThinks/EasySkyMesh/releases</a>.
             </li>
         </ul>
@@ -422,27 +470,27 @@ region save</code></pre>
                     <td><strong>WYSOKI / MASZT</strong><br><small>Sąsiedzi: &gt;15 bezpośrednich</small></td>
                     <td>Wysokie wieże, maszty kratownicowe, dachy wieżowców o bardzo dużym zasięgu.</td>
                     <td>
-                        <pre style="margin: 0; padding: 8px;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set txdelay 1.5
-set direct.txdelay 1.0
-set rxdelay 3</code></pre>
+                        <pre style="margin: 4px 0; padding: 6px;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set txdelay 1.5</code></pre>
+                        <pre style="margin: 4px 0; padding: 6px;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set direct.txdelay 1.0</code></pre>
+                        <pre style="margin: 4px 0; padding: 6px;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set rxdelay 3</code></pre>
                     </td>
                 </tr>
                 <tr>
                     <td><strong>DACH / ROOFTOP</strong><br><small>Sąsiedzi: 5 do 15</small></td>
                     <td>Klasyczny montaż anteny na dachu domu jednorodzinnego lub niskiego bloku.</td>
                     <td>
-                        <pre style="margin: 0; padding: 8px;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set txdelay 0.8
-set direct.txdelay 0.4
-set rxdelay 3</code></pre>
+                        <pre style="margin: 4px 0; padding: 6px;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set txdelay 0.8</code></pre>
+                        <pre style="margin: 4px 0; padding: 6px;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set direct.txdelay 0.4</code></pre>
+                        <pre style="margin: 4px 0; padding: 6px;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set rxdelay 3</code></pre>
                     </td>
                 </tr>
                 <tr>
                     <td><strong>DOM / NISKI</strong><br><small>Sąsiedzi: &lt;5 bezpośrednich</small></td>
                     <td>Węzeł domowy, antena na parapecie, balkonie lub wewnątrz pomieszczeń.</td>
                     <td>
-                        <pre style="margin: 0; padding: 8px;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set txdelay 0.3
-set direct.txdelay 0.1
-set rxdelay 3</code></pre>
+                        <pre style="margin: 4px 0; padding: 6px;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set txdelay 0.3</code></pre>
+                        <pre style="margin: 4px 0; padding: 6px;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set direct.txdelay 0.1</code></pre>
+                        <pre style="margin: 4px 0; padding: 6px;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set rxdelay 3</code></pre>
                     </td>
                 </tr>
             </tbody>
@@ -450,52 +498,84 @@ set rxdelay 3</code></pre>
 
         <h2>11. Podsumowanie: Kompletna lista domyślnych komend CLI</h2>
         <p>
-            Poniżej zebraliśmy wszystkie rekomendowane i standardowe komendy konfiguracji repeatera na Zachodzie w jednym miejscu. Możesz skopiować całą listę lub poszczególne parametry do wdrożenia w konsoli. Pamiętaj, aby po wszystkim zrestartować urządzenie:
+            Poniżej zebraliśmy wszystkie rekomendowane i standardowe komendy konfiguracji repeatera na Zachodzie.
+            Każda komenda CLI jest podana jako osobna linia z własnym przyciskiem do kopiowania do schowka:
         </p>
-        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj całość</button><code># 1. Tożsamość i kontakt (wprowadź swój własny nick)
-set owner "TWÓJ_NICK_LUB_ZNAK"
 
-# 2. Czasy rozgłoszeń (adverty)
-set advert.interval 240
-set flood.advert.interval 23
-set flood.max.advert 8
-
-# 3. Synchronizacja zegara
-clock sync
-
-# 4. Hasło gościa (puste)
-set guest.password ""
-
-# 5. Tryb przekazywania (Repeat Mode)
-set repeat.mode on
-
-# 6. Optymalizacja routingu i parametrów LoRa
-set path.hash.mode 2
-set multi.acks 1
-set agc.reset.interval 500
-set flood.max 64
-set flood.max.unscoped 8
-
-# 7. Konfiguracja zakresów regionalnych (Scopes)
-region put pl
-region put zachod
-region put pl-ds
-region put pl-lb
-region put wlkp
-region put wroc
-region allowf pl
-region allowf zachod
-region allowf pl-ds
-region allowf pl-lb
-region allowf wlkp
-region allowf wroc
-region save
-
-# 8. Opcjonalne oszczędzanie energii (odkomentuj jeśli zasilasz bateryjnie)
-# powersaving on
-
-# Na koniec zrestartuj urządzenie (komenda "write" nie występuje w urządzeniach):
-reboot</code></pre>
+        <ul class="summary-list">
+            <li>
+                <span class="desc">1. Tożsamość i kontakt (wprowadź swój własny nick):</span>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set owner "TWÓJ_NICK_LUB_ZNAK"</code></pre>
+            </li>
+            <li>
+                <span class="desc">2. Czasy rozgłoszeń lokalnych (adverty):</span>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set advert.interval 240</code></pre>
+            </li>
+            <li>
+                <span class="desc">3. Czasy rozgłoszeń globalnych (flood):</span>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set flood.advert.interval 23</code></pre>
+            </li>
+            <li>
+                <span class="desc">4. Limit rozgłoszeń advertów:</span>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set flood.max.advert 8</code></pre>
+            </li>
+            <li>
+                <span class="desc">5. Synchronizacja zegara repeatera:</span>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>clock sync</code></pre>
+            </li>
+            <li>
+                <span class="desc">6. Puste hasło gościa (Guest):</span>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set guest.password ""</code></pre>
+            </li>
+            <li>
+                <span class="desc">7. Tryb przekazywania (Repeat Mode):</span>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set repeat.mode on</code></pre>
+            </li>
+            <li>
+                <span class="desc">8. Tryb skrótów tras (path-hash):</span>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set path.hash.mode 2</code></pre>
+            </li>
+            <li>
+                <span class="desc">9. Wielokrotne potwierdzenia (multi-acks):</span>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set multi.acks 1</code></pre>
+            </li>
+            <li>
+                <span class="desc">10. Interwał resetu AGC (SX1262):</span>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set agc.reset.interval 500</code></pre>
+            </li>
+            <li>
+                <span class="desc">11. Maksymalna odległość regionalnych (flood.max):</span>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set flood.max 64</code></pre>
+            </li>
+            <li>
+                <span class="desc">12. Maksymalna odległość ogólnych (unscoped):</span>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set flood.max.unscoped 8</code></pre>
+            </li>
+            <li>
+                <span class="desc">13. Dodanie regionu PL:</span>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put pl</code></pre>
+            </li>
+            <li>
+                <span class="desc">14. Dodanie regionu zachod:</span>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put zachod</code></pre>
+            </li>
+            <li>
+                <span class="desc">15. Zezwolenie na floodowanie regionu PL:</span>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf pl</code></pre>
+            </li>
+            <li>
+                <span class="desc">16. Zezwolenie na floodowanie regionu zachod:</span>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf zachod</code></pre>
+            </li>
+            <li>
+                <span class="desc">17. Zapisanie ustawień regionów:</span>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region save</code></pre>
+            </li>
+            <li>
+                <span class="desc">18. Ponowne uruchomienie urządzenia (reboot):</span>
+                <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>reboot</code></pre>
+            </li>
+        </ul>
 
     </div>
 
