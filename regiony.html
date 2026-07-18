@@ -235,11 +235,23 @@
 
         <h2>Dlaczego filtrujemy ruch?</h2>
         <p>
-            Tradycyjne sieci mesh borykają się z problemem nadmiernego natężenia ruchu radiowego (broadcast storm). Gdy każdy węzeł w kraju przekazuje pakiety wszystkich innych użytkowników bez ograniczeń, pasmo szybko ulega zapchaniu. Rozwiązaniem w MeshCore jest mechanizm <strong>Regional Scope (Zakres Terytorialny)</strong>.
+            Tradycyjne sieci mesh borykają się z problemem nadmiernego natężenia ruchu radiowego (broadcast storm). Gdy każdy węzeł w kraju przekazuje pakiety wszystkich innych użytkowników bez ograniczeń, pasmo szybko ulega zapchaniu. Wpływa to bezpośrednio na wzrost liczby kolizji pakietów w eterze, przeciążenie stacji i utratę wiadomości. Rozwiązaniem w MeshCore jest mechanizm <strong>Regional Scope (Zakres Terytorialny)</strong>, pozwalający precyzyjnie ograniczać niekontrolowany flooding.
         </p>
         <p>
             Dzięki temu pakiety wysłane np. na kanale lokalnym we Wrocławiu są ignorowane przez przemienniki w Poznaniu czy Szczecinie. Pozwala to na solidarność sąsiedzką i odciążenie odległych regionów od zbędnego ruchu.
         </p>
+
+        <h2>Zasada działania: Region vs Scope</h2>
+        <p>
+            Aby dobrze skonfigurować filtry, warto zrozumieć relację między regionem na przemienniku a zakresem (scope) wiadomości:
+        </p>
+        <ul>
+            <li><strong>Region (Regiony):</strong> To geograficzne oznaczenia zdefiniowane i zapisane w konfiguracji repeatera (np. za pomocą poleceń CLI). Definiują one, jaki ruch stacja uznaje za "miejscowy" i dozwolony do dalszego przekazywania.</li>
+            <li><strong>Scope (Zakres):</strong> To geograficzne życzenie zasięgu, które użytkownik dołącza do swojej wiadomości w aplikacji klienckiej (np. Companion).</li>
+            <li><strong>Zasada dopasowania (Matching):</strong> Przemiennik przekaże dalej (retransmituje) wiadomość ze scope'em tylko wtedy, gdy nazwa tego scope'u znajduje się dokładnie na jego własnej liście dozwolonych regionów. Dopasowanie to opiera się na unikalnym kluczu 1:1 generowanym z nazwy (nie jest to proste dopasowanie podciągów).</li>
+            <li><strong>Znak wieloznaczny (*):</strong> Domyślnie każdy przemiennik posiada aktywną regułę <code>*</code>, która pozwala na bezproblemowe przekazywanie wiadomości bez przypisanego zakresu (unscoped). Wyłączenie jej nie jest zalecane.</li>
+            <li><strong>Przypadek specjalny (Sonderfall):</strong> Zakres <code>local</code> lub <code>lokal</code> służy wyłącznie do testów lokalnych "antena w antenę". Przemienniki nie mogą mieć skonfigurowanego tego regionu, dzięki czemu takie wiadomości nigdy nie są puszczane w flood.</li>
+        </ul>
 
         <h2>Tabela Rekomendowanych Kanałów na Zachodzie</h2>
         <p>Poniżej przedstawiamy zestaw kanałów i ich parametrów Scope, które konfigurujemy w aplikacji Companion:</p>
@@ -253,6 +265,11 @@
                 </tr>
             </thead>
             <tbody>
+                <tr>
+                    <td><strong>#europe</strong></td>
+                    <td><code>europe</code></td>
+                    <td>Szeroki ruch ogólnoeuropejski (prawie nie używany / bardzo rzadki).</td>
+                </tr>
                 <tr>
                     <td><strong>#polska</strong></td>
                     <td><code>pl</code></td>
@@ -285,12 +302,12 @@
                 </tr>
                 <tr>
                     <td><strong>#wroclaw</strong></td>
-                    <td><code>wroc</code></td>
+                    <td><code>wro</code></td>
                     <td>Ruch lokalny aglomeracji wrocławskiej. Całkowicie ignorowany poza regionem.</td>
                 </tr>
                 <tr>
                     <td><strong>#wroc-tech</strong></td>
-                    <td><code>wroc</code></td>
+                    <td><code>wro</code></td>
                     <td>Kanał techniczno-dyskusyjny aglomeracji wrocławskiej.</td>
                 </tr>
             </tbody>
@@ -302,13 +319,15 @@
         </p>
 
         <div class="alert-callout alert-callout-info">
-            <strong>💡 Bezpieczna kompatybilność:</strong><br>
-            Dodanie regionalnych zakresów (scopes) do konfiguracji repeatera <strong>nie zakłóca i nie blokuje przesyłania dotychczasowych wiadomości bez ustawionego zakresu (unscoped)</strong>. Przemiennik wciąż będzie sprawnie przekazywał standardowy ruch, zyskując jednocześnie możliwość obsługi pakietów z przypisanym zakresem regionalnym.
+            <strong>💡 Brak problemów z dotychczasowymi wiadomościami (Wsteczna Kompatybilność):</strong><br>
+            Dodanie regionalnych zakresów (scopes) do konfiguracji repeatera <strong>nie powoduje absolutnie żadnych problemów z przesyłaniem dotychczasowych/standardowych wiadomości</strong> bez ustawionego zakresu (unscoped). Przemiennik wciąż będzie sprawnie przekazywał dotychczasowy ruch, zyskując jednocześnie nową możliwość odbierania i przesyłania dalej wiadomości ze skonfigurowanym, konkretnym zakresem regionalnym (scope).
         </div>
 
         <p>
-            <strong>Ustawianie domyślnego regionu (default.region):</strong><br>
-            Za pomocą polecenia <code>set default.region [scope]</code> (np. <code>set default.region zachod</code>) możemy określić domyślny region dla urządzenia. Sprawia to, że pakiety generowane przez sam przemiennik (np. statusy, telemetryczne rozgłoszenia) lub odebrane jako unscoped (bez przypisanego regionu) zostaną automatycznie oznaczone wybranym zakresem, co ułatwia ich prawidłowe trasowanie w sieci.
+            <strong>Ustawianie domyślnego regionu repeatera (default.region):</strong><br>
+            Za pomocą polecenia <code>set default.region [nazwa_scope]</code> (np. <code>set default.region zachod</code>) należy określić domyślny zakres dla urządzenia.<br><br>
+            <strong>Co robi ta funkcja?</strong><br>
+            Wprowadzenie tej komendy powoduje, że wszystkie pakiety generowane bezpośrednio przez sam repeater (np. jego własne statusy, telemetria) oraz pakiety, które dotarły do niego jako "czyste" bez przypisanego zakresu (unscoped), zostaną automatycznie powiązane (oznakowane) wybranym domyślnym regionem. Pozwala to na ich automatyczne filtrowanie i spójne przesyłanie w ramach wybranej sieci regionalnej.
         </p>
 
         <div class="alert-callout alert-callout-warn">
@@ -317,31 +336,35 @@
         </div>
 
         <p>
-            Wprowadź poniższe komendy w CLI, aby zdefiniować dozwolone regiony, skonfigurować domyślny region oraz zezwolić na ich przekazywanie (floodowanie):
+            Wprowadź poniższe komendy w CLI (klikając "kopiuj" przy każdej linii osobno), aby zdefiniować dozwolone regiony, skonfigurować domyślny region oraz zezwolić na ich przekazywanie (floodowanie):
         </p>
 
-        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code># Dodanie dopuszczalnych zakresów terytorialnych do bazy przemiennika
-region put pl
-region put zachod
-region put pl-ds
-region put pl-lb
-region put wlkp
-region put wroc
+        <div style="display: flex; flex-direction: column; gap: 8px; margin: 16px 0;">
+            <div style="font-weight: bold; margin-top: 8px; color: var(--text-main);"># Dodanie dopuszczalnych zakresów terytorialnych do bazy przemiennika:</div>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put europe</code></pre>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put pl</code></pre>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put zachod</code></pre>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put pl-ds</code></pre>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put pl-lb</code></pre>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put wlkp</code></pre>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put wro</code></pre>
 
-# Zezwolenie na floodowanie (rozsyłanie) pakietów z tych zakresów
-region allowf pl
-region allowf zachod
-region allowf pl-ds
-region allowf pl-lb
-region allowf wlkp
-region allowf wroc
+            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);"># Zezwolenie na floodowanie (rozsyłanie) pakietów z tych zakresów:</div>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf europe</code></pre>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf pl</code></pre>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf zachod</code></pre>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf pl-ds</code></pre>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf pl-lb</code></pre>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf wlkp</code></pre>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf wro</code></pre>
 
-# Ustawienie domyślnego regionu dla własnych i unscoped pakietów
-set default.region zachod
+            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);"># Ustawienie domyślnego regionu dla własnych i unscoped pakietów:</div>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set default.region zachod</code></pre>
 
-# Zapisanie zmian w pamięci stałej
-region save
-reboot</code></pre>
+            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);"># Zapisanie zmian w pamięci stałej i restart:</div>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region save</code></pre>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>reboot</code></pre>
+        </div>
 
         <div class="alert-callout alert-callout-info">
             <strong>Solidarność sąsiedzka:</strong>
