@@ -15,6 +15,7 @@ def generate_screenshots():
             "repeater": "repeater.html",
             "roomserver": "roomserver.html",
             "regiony": "regiony.html",
+            "kanaly": "kanaly.html",
             "sf6": "sf6-testy.html"
         }
 
