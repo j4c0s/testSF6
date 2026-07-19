@@ -343,7 +343,7 @@
 
         <p>
             <strong>Ustawianie domyślnego regionu repeatera (default.region):</strong><br>
-            Za pomocą polecenia <code>set default.region [nazwa_scope]</code> (np. <code>set default.region pl</code>) można określić domyślny scope pakietów wysyłanych przez urządzenie.<br><br>
+            Za pomocą polecenia <code>set default.region [nazwa_scope]</code> można określić domyślny scope pakietów wysyłanych przez urządzenie.<br><br>
             <strong>Co robi ta funkcja?</strong><br>
             Wprowadzenie regionu domyślnego powoduje, że wszystkie pakiety generowane bezpośrednio przez samo urządzenie (np. Adverty) zostaną oznaczone scopem. Najlepiej ustawić większy region np. pl lub zachod.
         </p>
@@ -359,27 +359,27 @@
         </p>
 
         <div style="display: flex; flex-direction: column; gap: 8px; margin: 16px 0;">
-            <div style="font-weight: bold; margin-top: 8px; color: var(--text-main);"># 1. Dodanie regionów podstawowych (dodaj wszystkie):</div>
+            <div style="font-weight: bold; margin-top: 8px; color: var(--text-main);">Dodanie regionów podstawowych (dodaj wszystkie):</div>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put europe</code></pre>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put pl</code></pre>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put zachod</code></pre>
 
-            <div style="font-weight: bold; margin-top: 8px; color: var(--text-main);"># 2. Dodanie regionów województwa (wybierz właściwy):</div>
+            <div style="font-weight: bold; margin-top: 8px; color: var(--text-main);">Dodanie regionów województwa (wybierz właściwy):</div>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put pl-ds</code></pre>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put pl-lb</code></pre>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put wlkp</code></pre>
 
-            <div style="font-weight: bold; margin-top: 8px; color: var(--text-main);"># 3. Dodanie regionów twojego miasta (np. Wrocławia):</div>
+            <div style="font-weight: bold; margin-top: 8px; color: var(--text-main);">Dodanie regionów twojego miasta (np. Wrocławia):</div>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put wro</code></pre>
 
-            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);"># 4. Ustawienie domyślnego regionu dla pakietów repeatera(np. pl):</div>
+            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);">Ustawienie domyślnego regionu dla pakietów repeatera(np. pl):</div>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set default.region pl</code></pre>
 
-            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);"># 5. Sprawdzenie wprowadzonych regionów:</div>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region show</code></pre>
+            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);">Sprawdzenie wprowadzonych regionów:</div>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region</code></pre>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region default</code></pre>
 
-            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);"># 5. Zapisanie zmian w pamięci stałej i restart:</div>
+            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);">Zapisanie zmian w pamięci stałej:</div>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region save</code></pre>
         </div>
 
