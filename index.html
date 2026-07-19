@@ -237,6 +237,11 @@
         }
 
         .param-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 120px;
             background-color: var(--bg-page);
             border: 1px solid var(--border);
             border-radius: 8px;
@@ -254,9 +259,18 @@
             font-weight: 700;
         }
 
+        .param-eng-label {
+            display: block;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+
         .param-value {
             display: block;
-            font-size: 1.1rem;
+            font-size: 1.4rem;
             font-weight: 800;
             color: var(--accent-primary);
         }
@@ -306,7 +320,7 @@
     </header>
 
     <section class="hero">
-        <span class="tagline">POLSKA ZACHODNIA / LORA.868</span>
+        <span class="tagline">MESHCORE POLSKA ZACHODNIA</span>
         <h1>Zalecane ustawienia</h1>
         <p>
             Na poniższej stronie znajdziesz zalecane ustawienia dla urządzeń w regionie zachodnim (Dolny Śląsk, Lubuskie, Wielkopolska).
@@ -318,28 +332,73 @@
         <div class="info-box radio-params-box">
             <h3>Podstawowe Parametry Radia</h3>
             <p>
-                Poniższe wartości są standardem w regionie zachodnim i muszą być skonfigurowane w każdym urządzeniu.
-                Wszystkie węzły pracują wyłącznie w europejskim pasmie 868 MHz (EU/UK Narrow). Prosimy o ścisłe przestrzeganie tej częstotliwości, aby zachować pełną spójność sieci radiowej.
+                W regionie zachodnim używamy ogólnoeuropejskiego zestawu ustawień radiowych (Preset EU/UK Narrow). Aby zachować spójność sieci radiowej, te ustawienia muszą być stosowane w urządzeniach klienckich i stacjach bazowych.
             </p>
             <p style="margin-top: 12px; font-weight: bold;">Stosowany ogólnie preset: EU/UK (Narrow) czyli:</p>
             <div class="params-grid">
                 <div class="param-item">
-                    <span class="param-label">Częstotliwość</span>
-                    <span class="param-value">869.618 MHz</span>
+                    <span class="param-label">Częstotliwość<br>(MHz)</span>
+                    <span class="param-value">869.618</span>
+                    <span class="param-eng-label">Frequency</span>
                 </div>
                 <div class="param-item">
-                    <span class="param-label">Szerokość pasma</span>
-                    <span class="param-value">62.5 kHz</span>
+                    <span class="param-label">Szerokość pasma<br>(kHz)</span>
+                    <span class="param-value">62.5</span>
+                    <span class="param-eng-label">Bandwidth</span>
                 </div>
                 <div class="param-item">
-                    <span class="param-label">Spread Factor</span>
+                    <span class="param-label">Współczynnik rozpraszania (SF)</span>
                     <span class="param-value">8</span>
+                    <span class="param-eng-label">Spread Factor</span>
                 </div>
                 <div class="param-item">
-                    <span class="param-label">Coding Rate</span>
+                    <span class="param-label">Współczynnik kodowania (CR)</span>
                     <span class="param-value">8</span>
+                    <span class="param-eng-label">Coding Rate</span>
                 </div>
             </div>
+        </div>
+
+        <h2 class="section-title">Instrukcje dla urządzeń</h2>
+        <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem;">
+            Wybierz typ urządzenia, aby przejść do instrukcji konfiguracji.
+        </p>
+
+        <div class="guides-grid">
+
+            <a href="companion.html" class="guide-card inactive" onclick="return false;">
+                <div>
+                    <div class="card-badge" style="color: var(--text-muted);">TELEFON / URZĄDZENIE KLIENCKIE</div>
+                    <h3 class="card-title" style="color: var(--text-muted);">Companion</h3>
+                    <p class="card-description">
+                        Konfiguracja aplikacji Android, parowanie Bluetooth, zalecane ustawienia regionu. (Już wkrótce)
+                    </p>
+                </div>
+                <span class="card-link" style="color: var(--text-muted);">instrukcja niedostępna →</span>
+            </a>
+
+            <a href="repeater.html" class="guide-card">
+                <div>
+                    <div class="card-badge">PRZEMIENNIK / STACJA BAZOWA</div>
+                    <h3 class="card-title">Repeater</h3>
+                    <p class="card-description">
+                        Zalecane ustawienia stosowane w regionie oraz dodatkowe opcje dla repeaterów.
+                    </p>
+                </div>
+                <span class="card-link">otwórz instrukcję →</span>
+            </a>
+
+            <a href="roomserver.html" class="guide-card inactive" onclick="return false;">
+                <div>
+                    <div class="card-badge" style="color: var(--text-muted);">STACJA NASŁUCHOWA / ESP32</div>
+                    <h3 class="card-title" style="color: var(--text-muted);">Observer</h3>
+                    <p class="card-description">
+                        Jak uruchomić bezgłośny nasłuch z przesyłaniem danych przez Wi-Fi bezpośrednio do systemów telemetrycznych LetsMesh.net i meshcorekrk.cma.pl. (Już wkrótce)
+                    </p>
+                </div>
+                <span class="card-link" style="color: var(--text-muted);">instrukcja niedostępna →</span>
+            </a>
+
         </div>
 
         <h2 class="section-title">Kanały i Regiony</h2>
@@ -367,52 +426,10 @@
             </a>
         </div>
 
-        <h2 class="section-title">Instrukcje dla urządzeń</h2>
-        <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem;">
-            Wybierz urządzenie, aby przejść do instrukcji konfiguracji. Uwaga: obecnie skupiamy się na optymalizacji repeaterów (pozostałe instrukcje są chwilowo nieaktywne).
-        </p>
-
-        <div class="guides-grid">
-
-            <a href="companion.html" class="guide-card inactive" onclick="return false;">
-                <div>
-                    <div class="card-badge" style="color: var(--text-muted);">TELEFON / URZĄDZENIE KLIENCKIE</div>
-                    <h3 class="card-title" style="color: var(--text-muted);">Companion</h3>
-                    <p class="card-description">
-                        Konfiguracja aplikacji Android, parowanie Bluetooth, aktywacja prefixu 3-bajtowego oraz zasady nazewnictwa węzłów bez GPS. (Chwilowo nieaktywne)
-                    </p>
-                </div>
-                <span class="card-link" style="color: var(--text-muted);">instrukcja niedostępna →</span>
-            </a>
-
-            <a href="repeater.html" class="guide-card">
-                <div>
-                    <div class="card-badge">PRZEMIENNIK / STACJA BAZOWA</div>
-                    <h3 class="card-title">Repeater</h3>
-                    <p class="card-description">
-                        Optymalizacja czasów rozgłoszeń (advertów), profile delayów dopasowane do wysokości montażu oraz limity przeskoku (flood.max).
-                    </p>
-                </div>
-                <span class="card-link">otwórz instrukcję →</span>
-            </a>
-
-            <a href="roomserver.html" class="guide-card inactive" onclick="return false;">
-                <div>
-                    <div class="card-badge" style="color: var(--text-muted);">STACJA NASŁUCHOWA / ESP32</div>
-                    <h3 class="card-title" style="color: var(--text-muted);">RoomServer / Observer</h3>
-                    <p class="card-description">
-                        Jak uruchomić bezgłośny nasłuch z przesyłaniem danych przez Wi-Fi bezpośrednio do systemów telemetrycznych letsmesh i cma.pl. (Chwilowo nieaktywne)
-                    </p>
-                </div>
-                <span class="card-link" style="color: var(--text-muted);">instrukcja niedostępna →</span>
-            </a>
-
-        </div>
     </main>
 
     <footer>
-        <p><strong>MeshCore #zachod</strong> – Praktyczne vademecum konfiguracji sieci LoRa.</p>
-        <p>© 2026 Społeczność MeshCore Zachód.</p>
+        <p>© 2026 Społeczność MeshCore Zachód. Autor Jaco Lubań☄️</p>
     </footer>
 
 </body>
