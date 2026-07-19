@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Regiony i Kanały – Konfiguracja Scopes</title>
+    <title>Regiony i Scopes – Konfiguracja Przemiennika</title>
     <style>
         :root {
             --bg-page: #f8fafc;
@@ -104,34 +104,18 @@
             padding-bottom: 8px;
         }
 
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin: 24px 0 12px 0;
+            color: var(--text-main);
+        }
+
         p {
             font-size: 1rem;
             line-height: 1.6;
             color: var(--text-muted);
             margin-bottom: 16px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 24px 0;
-            font-size: 0.9rem;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-
-        th {
-            background-color: var(--bg-page);
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        tr:hover {
-            background-color: var(--bg-page);
         }
 
         ol, ul {
@@ -186,6 +170,60 @@
             background-color: var(--bg-page);
         }
 
+        /* Hierarchy visual presentation */
+        .hierarchy-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .hierarchy-node {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 16px;
+            position: relative;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .hierarchy-node:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .node-level-1 { margin-left: 0; border-left: 4px solid #3b82f6; }
+        .node-level-2 { margin-left: 24px; border-left: 4px solid #10b981; }
+        .node-level-3 { margin-left: 48px; border-left: 4px solid #f59e0b; }
+        .node-level-4 { margin-left: 72px; border-left: 4px solid #8b5cf6; }
+        .node-level-5 { margin-left: 96px; border-left: 4px solid #ec4899; }
+
+        .node-title {
+            font-weight: 800;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .node-badge {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            background-color: var(--bg-page);
+            border: 1px solid var(--border);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--accent-primary);
+        }
+
+        .node-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+
         .alert-callout {
             border-radius: 12px;
             padding: 16px;
@@ -230,20 +268,15 @@
     <div class="container">
         <a href="index.html" class="nav-back">← Powrót do strony głównej</a>
 
-        <h1>Regiony i Kanały</h1>
-        <div class="subtitle">Zasada działania Regional Scope (zakresów terytorialnych) oraz zalecane konfiguracje kanałów i regionów w Polsce Zachodniej.</div>
+        <h1>Regiony i Scopes</h1>
+        <div class="subtitle">Zasada działania Regional Scope (zakresów terytorialnych) oraz pełna hierarchia terytorialna w Polsce Zachodniej.</div>
 
-        <h2>Dlaczego filtrujemy ruch?</h2>
+        <h2>Zasada działania: Region vs Scope</h2>
         <p>
             Tradycyjne sieci mesh borykają się z problemem nadmiernego natężenia ruchu radiowego (broadcast storm). Gdy każdy węzeł w kraju przekazuje pakiety wszystkich innych użytkowników bez ograniczeń, pasmo szybko ulega zapchaniu. Wpływa to bezpośrednio na wzrost liczby kolizji pakietów w eterze, przeciążenie stacji i utratę wiadomości. Rozwiązaniem w MeshCore jest mechanizm <strong>Regional Scope (Zakres Terytorialny)</strong>, pozwalający precyzyjnie ograniczać niekontrolowany flooding.
         </p>
         <p>
             Dzięki temu pakiety wysłane np. na kanale lokalnym we Wrocławiu są ignorowane przez przemienniki w Poznaniu czy Szczecinie. Pozwala to na solidarność sąsiedzką i odciążenie odległych regionów od zbędnego ruchu.
-        </p>
-
-        <h2>Zasada działania: Region vs Scope</h2>
-        <p>
-            Aby dobrze skonfigurować filtry, warto zrozumieć relację między regionem na przemienniku a zakresem (scope) wiadomości:
         </p>
         <ul>
             <li><strong>Region (Regiony):</strong> To geograficzne oznaczenia zdefiniowane i zapisane w konfiguracji repeatera (np. za pomocą poleceń CLI). Definiują one, jaki ruch stacja uznaje za "miejscowy" i dozwolony do dalszego przekazywania.</li>
@@ -252,67 +285,44 @@
             <li><strong>Znak wieloznaczny (*):</strong> Domyślnie każdy przemiennik posiada aktywną regułę <code>*</code>, która pozwala na bezproblemowe przekazywanie wiadomości bez przypisanego zakresu (unscoped). Wyłączenie jej nie jest zalecane.</li>
         </ul>
 
-        <h2>Tabela Rekomendowanych Kanałów na Zachodzie</h2>
-        <p>Poniżej przedstawiamy zestaw kanałów i ich parametrów Scope, które konfigurujemy w aplikacji Companion:</p>
+        <h2>Hierarchia Terytorialna Regionów</h2>
+        <p>
+            Regiony w sieci MeshCore są zorganizowane w logiczną strukturę drzewiastą o rosnącym stopniu szczegółowości. Poniższy schemat obrazuje strukturę terytorialną w regionie zachodnim:
+        </p>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Kanał w Companion</th>
-                    <th>Parametr Scope</th>
-                    <th>Zasięg terytorialny i przeznaczenie</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>#europe</strong></td>
-                    <td><code>europe</code></td>
-                    <td>Szeroki ruch ogólnoeuropejski (prawie nie używany / bardzo rzadki).</td>
-                </tr>
-                <tr>
-                    <td><strong>#polska</strong></td>
-                    <td><code>pl</code></td>
-                    <td>Globalny ruch krajowy. Powtarzany przez wszystkie repeatery w Polsce.</td>
-                </tr>
-                <tr>
-                    <td><strong>#zachod</strong></td>
-                    <td><code>zachod</code></td>
-                    <td>Ruch zintegrowany dla Dolnego Śląska, Lubuskiego i Wielkopolski.</td>
-                </tr>
-                <tr>
-                    <td><strong>#dolnoslaskie</strong></td>
-                    <td><code>pl-ds</code></td>
-                    <td>Ruch wewnątrz województwa Dolnośląskiego.</td>
-                </tr>
-                <tr>
-                    <td><strong>#ds-test</strong></td>
-                    <td><code>pl-ds</code></td>
-                    <td>Dodatkowy kanał testowo-techniczny dla województwa Dolnośląskiego.</td>
-                </tr>
-                <tr>
-                    <td><strong>#lubuskie</strong></td>
-                    <td><code>pl-lb</code></td>
-                    <td>Ruch wewnątrz województwa Lubuskiego.</td>
-                </tr>
-                <tr>
-                    <td><strong>#wlkp</strong></td>
-                    <td><code>wlkp</code></td>
-                    <td>Ruch wewnątrz województwa Wielkopolskiego.</td>
-                </tr>
-                <tr>
-                    <td><strong>#wroclaw</strong></td>
-                    <td><code>wro</code></td>
-                    <td>Ruch lokalny aglomeracji wrocławskiej. Całkowicie ignorowany poza regionem.</td>
-                </tr>
-                <tr>
-                    <td><strong>#wroc-tech</strong></td>
-                    <td><code>wro</code></td>
-                    <td>Kanał techniczno-dyskusyjny aglomeracji wrocławskiej.</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="hierarchy-container">
+            <!-- Level 1 -->
+            <div class="hierarchy-node node-level-1">
+                <div class="node-title">Poziom 1: Kontynent <span class="node-badge">europe</span></div>
+                <div class="node-desc">Najwyższy stopień ogólności. Szeroki ruch obejmujący cały kontynent europejski. Ze względu na ograniczenia pasma używany niezwykle rzadko.</div>
+            </div>
 
-        <h2>Konfiguracja zakresów na Repeaterze (CLI)</h2>
+            <!-- Level 2 -->
+            <div class="hierarchy-node node-level-2">
+                <div class="node-title">Poziom 2: Kraj <span class="node-badge">pl</span></div>
+                <div class="node-desc">Zasięg ogólnokrajowy. Łączy stacje bazowe w całej Polsce i jest powtarzany przez wszystkie polskie repeatery.</div>
+            </div>
+
+            <!-- Level 3 -->
+            <div class="hierarchy-node node-level-3">
+                <div class="node-title">Poziom 3: Makroregion <span class="node-badge">zachod</span></div>
+                <div class="node-desc">Zintegrowany ruch dla Polski Zachodniej (obejmuje województwa Dolnośląskie, Lubuskie i Wielkopolskie).</div>
+            </div>
+
+            <!-- Level 4 -->
+            <div class="hierarchy-node node-level-4">
+                <div class="node-title">Poziom 4: Województwa <span class="node-badge">pl-ds</span> <span class="node-badge">pl-lb</span> <span class="node-badge">wlkp</span></div>
+                <div class="node-desc">Ruch ograniczony do konkretnych granic administracyjnych województw: dolnośląskiego (pl-ds), lubuskiego (pl-lb) oraz wielkopolskiego (wlkp).</div>
+            </div>
+
+            <!-- Level 5 -->
+            <div class="hierarchy-node node-level-5">
+                <div class="node-title">Poziom 5: Lokalne / Aglomeracyjne / Miejskie <span class="node-badge">wro</span></div>
+                <div class="node-desc">Najniższy stopień, dedykowany konkretnym miastom i aglomeracjom miejskim (np. "wro" dla aglomeracji wrocławskiej). Pozwala na swobodną, gęstą komunikację miejską bez obciążania stacji w regionach nadrzędnych.</div>
+            </div>
+        </div>
+
+        <h2>Dodanie regionów do konfiguracji repeatera</h2>
         <p>
             Aby Twój repeater poprawnie przekazywał pakiety z powyższych zakresów regionalnych i ignorował ruch z innych części kraju, musisz zdefiniować dozwolone regiony w jego pamięci.
         </p>
@@ -326,20 +336,21 @@
             <strong>Ustawianie domyślnego regionu repeatera (default.region):</strong><br>
             Za pomocą polecenia <code>set default.region [nazwa_scope]</code> (np. <code>set default.region zachod</code>) należy określić domyślny zakres dla urządzenia.<br><br>
             <strong>Co robi ta funkcja?</strong><br>
-            Wprowadzenie tej komendy powoduje, że wszystkie pakiety generowane bezpośrednio przez sam repeater (np. jego własne statusy, telemetria) oraz pakiety, które dotarły do niego jako "czyste" bez przypisanego zakresu (unscoped), zostaną automatycznie powiązane (oznakowane) wybranym domyślnym regionem. Pozwala to na ich automatyczne filtrowanie i spójne przesyłanie w ramach wybranej sieci regionalnej.
+            Wprowadzenie tej komendy powoduje, że wszystkie pakiety generowane bezpośrednio przez sam repeater (np. jego statusy, telemetria) oraz pakiety, które dotarły do niego bez ustawionego scope (tzw. unscoped) od innych lokalnych użytkowników, zostaną automatycznie powiązane z tym zakresem. Pozwala to na ich automatyczne filtrowanie i spójne przesyłanie w ramach wybranej sieci regionalnej.
         </p>
 
         <div class="alert-callout alert-callout-warn">
-            <strong>🌍 Ważne zalecenie:</strong><br>
-            Należy dodawać do konfiguracji repeatera wyłącznie regiony, które bezpośrednio odpowiadają Twojemu własnemu województwu oraz regiony nadrzędne (takie jak <code>pl</code> czy <code>zachod</code>). Inne regiony zaleca się dodawać tylko w przypadku, gdy stacja znajduje się blisko granicy administracyjnej lub pełni rolę mostu (bridge) przekazującego ruch między województwami.
+            <strong>🌍 Ważne zalecenie terytorialne:</strong><br>
+            Zaleca się dodawanie do konfiguracji repeatera wyłącznie regionów, które bezpośrednio odpowiadają Twojemu własnemu województwu oraz regiony nadrzędne (takie jak <code>pl</code> czy <code>zachod</code>). Inne regiony sąsiednich województw należy dodawać tylko wtedy, gdy stacja znajduje się blisko granicy administracyjnej lub pełni rolę mostu (bridge) przekazującego ruch.
         </div>
 
+        <h3>Pełna lista komend CLI do wprowadzenia na Repeaterze:</h3>
         <p>
             Wprowadź poniższe komendy w CLI (klikając "kopiuj" przy każdej linii osobno), aby zdefiniować dozwolone regiony, skonfigurować domyślny region oraz zezwolić na ich przekazywanie (floodowanie):
         </p>
 
         <div style="display: flex; flex-direction: column; gap: 8px; margin: 16px 0;">
-            <div style="font-weight: bold; margin-top: 8px; color: var(--text-main);"># Dodanie dopuszczalnych zakresów terytorialnych do bazy przemiennika:</div>
+            <div style="font-weight: bold; margin-top: 8px; color: var(--text-main);"># 1. Dodanie dopuszczalnych regionów do bazy przemiennika:</div>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put europe</code></pre>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put pl</code></pre>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put zachod</code></pre>
@@ -348,7 +359,7 @@
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put wlkp</code></pre>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put wro</code></pre>
 
-            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);"># Zezwolenie na floodowanie (rozsyłanie) pakietów z tych zakresów:</div>
+            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);"># 2. Zezwolenie na floodowanie pakietów z tych zakresów:</div>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf europe</code></pre>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf pl</code></pre>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf zachod</code></pre>
@@ -357,18 +368,18 @@
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf wlkp</code></pre>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf wro</code></pre>
 
-            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);"># Ustawienie domyślnego regionu dla własnych i unscoped pakietów:</div>
+            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);"># 3. Ustawienie domyślnego regionu dla własnych i unscoped pakietów (np. zachod):</div>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set default.region zachod</code></pre>
 
-            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);"># Zapisanie zmian w pamięci stałej i restart:</div>
+            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);"># 4. Zapisanie zmian w pamięci stałej i restart:</div>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region save</code></pre>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>reboot</code></pre>
         </div>
 
-        <div class="alert-callout alert-callout-info">
-            <strong>Solidarność sąsiedzka:</strong>
-            Dzięki powyższym regułom, Twój przemiennik pomoże w przekazywaniu lokalnego ruchu sąsiadom, jednocześnie odrzucając zbędny szum z odległych województw.
-        </div>
+        <p>
+            Chcesz poznać listę zalecanych kanałów, które można skonfigurować w aplikacji klienckiej Companion?
+            Przejdź na stronę <a href="kanaly.html" style="color: var(--accent-primary); font-weight: 700;">Zalecane Kanały i Scopes</a>.
+        </p>
     </div>
 
     <footer>

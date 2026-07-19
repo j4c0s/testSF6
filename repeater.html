@@ -257,240 +257,121 @@
         <a href="index.html" class="nav-back">← Powrót do strony głównej</a>
 
         <h1>Instrukcja dla Repeaterów</h1>
-        <div class="subtitle">Krok po kroku: Pełna i zoptymalizowana konfiguracja stacji bazowych (przemienników) w regionie zachodnim.</div>
+        <div class="subtitle">Zwięzły poradnik: Szybka i zoptymalizowana konfiguracja stacji bazowych (przemienników) na Zachodzie.</div>
 
         <!-- Firmware upgrade notice -->
         <div class="alert-callout alert-callout-info">
-            <strong>⚡ Ważna aktualizacja oprogramowania:</strong><br>
-            Gorąco zachęcamy do aktualizowania repeaterów do wersji oprogramowania <strong>minimum 1.16</strong>.
-            Oficjalne wydania można pobrać bezpośrednio ze strony <a href="https://meshcore.io" target="_blank" rel="noopener noreferrer">meshcore.io</a>. Alternatywne i zoptymalizowane wersje oprogramowania od <a href="https://iotthinks.com" target="_blank" rel="noopener noreferrer">IoTThinks (iotthinks.com)</a> są dostępne do pobrania bezpośrednio na stronie <a href="https://github.com/IoTThinks/EasySkyMesh/releases" target="_blank" rel="noopener noreferrer">IoTThinks GitHub Releases</a>.<br><br>
-            Repeatery poniżej wersji 1.14 nie przesyłają wiadomości 2 i 3-bajtowych. Ponadto, wersje poniżej 1.16 wysyłają wiadomości z preambułą 16 zamiast 32, co jest kluczowym elementem w dalszej optymalizacji i obniżaniu zużycia energii baterii.
+            <strong>⚡ Aktualizacja oprogramowania:</strong><br>
+            Zaleca się aktualizację do wersji oprogramowania <strong>minimum 1.16</strong>.
+            Oficjalne wydania pobierzesz ze strony <a href="https://meshcore.io" target="_blank" rel="noopener noreferrer">meshcore.io</a>. Zoptymalizowane wersje z oszczędzaniem energii i preambułą 32 pobierzesz bezpośrednio z <a href="https://github.com/IoTThinks/EasySkyMesh/releases" target="_blank" rel="noopener noreferrer">IoTThinks GitHub Releases</a>.
         </div>
 
         <!-- CLI info notice -->
         <div class="alert-callout alert-callout-warn">
-            <strong>💻 Wiersz poleceń (Command Line - CLI):</strong><br>
-            Na tej stronie znajdziesz również parametry i ustawienia, które można wprowadzić wyłącznie poprzez Wiersz poleceń (CLI) po zalogowaniu do repeatera.
-            <strong>Pamiętaj:</strong> po wysłaniu każdej komendy w CLI poczekaj na potwierdzenie jej wykonania. Komendy bez potwierdzenia zwrotnego mogły nie dotrzeć do repeatera.
+            <strong>💻 Wiersz poleceń (CLI):</strong><br>
+            Po wysłaniu każdej komendy w CLI zawsze poczekaj na zwrotne potwierdzenie jej wykonania z przemiennika.
         </div>
 
-        <h2>1. Zasilanie i pobór prądu</h2>
-        <p>
-            Przed fizycznym montażem przemiennika na dachu lub maszcie należy bezwzględnie przetestować i zweryfikować jego bilans energetyczny:
-        </p>
+        <h2>1. Zasilanie i parametry fizyczne</h2>
         <ul>
-            <li><strong>Obciążenie zasilania:</strong> Dokładnie sprawdź obciążenie akumulatorów lub zasilacza buforowego pod kątem stabilności napięcia pod obciążeniem nadawczym.</li>
-            <li><strong>Ładowanie solarem:</strong> W przypadku instalacji zasilanych panelami fotowoltaicznymi upewnij się, że panel słoneczny oraz kontroler ładowania są odpowiednio dobrane do pojemności akumulatora. Sprawdź, czy proces ładowania solarem efektywnie uzupełnia energię w ciągu dnia, zabezpieczając ciągłość pracy urządzenia w nocy i podczas gorszych warunków pogodowych.</li>
-            <li><strong>Poziom szumów (Noise Floor):</strong> Zmierz wskaźnik RSSI tła. Ciągły poziom szumów powyżej -110 dBm oznacza lokalne zakłócenia. W eliminacji zakłóceń z pobliskich masztów komórkowych (BTS) wysoce zalecane jest użycie filtra szczelinowego (cavity filter).</li>
+            <li><strong>Zasilanie i Bilans solarny:</strong> Zweryfikuj stabilność napięcia przy nadawaniu. W instalacjach solarnych upewnij się, że panel i akumulator gwarantują stabilną pracę w nocy.</li>
+            <li><strong>Szumy tła (Noise Floor):</strong> RSSI tła powyżej -110 dBm oznacza lokalne zakłócenia. W pobliżu masztów komórkowych (BTS) wysoce zalecane jest użycie filtra szczelinowego (cavity filter).</li>
+            <li><strong>Nazewnictwo:</strong> W nazwie węzła nie stosuje się prefixu "RPT". Wystarczy nazwa określająca unikalną lokalizację (np. <code>Sulechow_Wsch</code>), ułatwiająca celowanie anten.</li>
         </ul>
 
-        <h2>2. Nazewnictwo</h2>
-        <p>
-            Dla ułatwienia orientacji użytkowników w topologii sieci i ułatwienia im wycelowania anten, niezwykle istotne jest prawidłowe nazwanie stacji:
-        </p>
-        <ul>
-            <li><strong>Lokalizacja GPS:</strong> Dobrze jest ustawić przybliżoną lokalizację GPS, aby repeater pojawiał się na mapach sieci.</li>
-            <li><strong>Nazwa węzła:</strong> Ze względu na brak sztywnego krajowego standardu, najważniejsze jest podanie <strong>lokalizacji pozwalającej łatwo określić położenie przemiennika</strong>. W nazwie nie musi znajdować się sztywne określenie "typ montażu", ani skrót "RPT", o ile nazwa jednoznacznie identyfikuje fizyczną lokalizację stacji bazowej.</li>
-        </ul>
-
-        <h2>3. Informacja o właścicielu</h2>
-        <p>
-            Dla ułatwienia diagnostyki sieciowej i identyfikacji stacji bazowych, ustaw swoją nazwę companion (znak wywoławczy lub pseudonim), pod którą można się z Tobą bezpośrednio skontaktować w sieci. Ułatwi to odnalezienie właściciela w razie potrzeby kontaktu lub awarii:
-        </p>
+        <h2>2. Tożsamość i kontakt</h2>
+        <p>Ustaw swój nick lub znak wywoławczy jako właściciel stacji do diagnostyki:</p>
         <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set owner.info "TWÓJ_NICK_LUB_ZNAK"</code></pre>
 
-        <h2>4. Rozgłoszenia (Adverty)</h2>
-        <p>
-            Aby zapobiec niepotrzebnemu wysycaniu pasma częstymi i powtarzającymi się ramkami statusu, konfigurujemy rzadkie interwały advertów. Wizualnie dzielimy je na dwa osobne parametry:
-        </p>
-
+        <h2>3. Rozgłoszenia (Adverty)</h2>
         <div class="advert-grid">
             <div class="advert-box">
-                <h4>Rozgłoszenie Zero-Hop (Lokalne)</h4>
-                <p>Służy wyłącznie bezpośrednim sąsiadom w zasięgu wzroku. Interwał podajemy w minutach: <strong>240 minut</strong> (czyli równe 4 godziny).</p>
+                <h4>Rozgłoszenie Lokalne (Zero-Hop)</h4>
+                <p>Ustaw interwał rozgłoszeń lokalnych w minutach (zalecane 4 godziny czyli 240 minut):</p>
                 <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set advert.interval 240</code></pre>
             </div>
             <div class="advert-box">
-                <h4>Rozgłoszenie Flood (Globalne)</h4>
-                <p>Rozprzestrzenia się po całej sieci jako flood ze statusem zero-hop. Interwał podajemy w godzinach: <strong>23 godziny</strong>.</p>
+                <h4>Rozgłoszenie Globalne (Flood)</h4>
+                <p>Ustaw interwał globalnych rozgłoszeń w godzinach (zalecane 23 godziny):</p>
                 <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set flood.advert.interval 23</code></pre>
             </div>
         </div>
 
-        <h2>5. Lokalizacja</h2>
-        <p>
-            Dobrze jest ustawić przybliżoną lokalizację GPS w konfiguracji przemiennika. Dzięki temu repeater poprawnie pojawi się na mapach, a inni użytkownicy sieci będą mogli łatwiej wycelować swoje anteny kierunkowe w stronę Twojej stacji bazowej.
-        </p>
-
-        <h2>6. Zegar i jego synchronizowanie</h2>
-        <p>
-            Prawidłowy czas systemowy na repeaterze jest kluczowy dla właściwej interpretacji logów i poprawności routingu. Do synchronizacji czasu służy dedykowane polecenie:
-        </p>
+        <h2>4. Synchronizacja zegara</h2>
+        <p>Do synchronizacji czasu systemowego:</p>
         <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>clock sync</code></pre>
-        <p>
-            <strong>Wskazówka przy problemach z czasem wstecz:</strong> W przypadku, gdy czas systemowy na urządzeniu jest błędny i nie da się go cofnąć tradycyjną komendą, należy najpierw zresetować zegar systemowy poleceniem, a następnie wykonać synchronizację:
-        </p>
+        <p>W przypadku błędnego zegara, którego nie można zsynchronizować tradycyjnie, użyj komendy restartu zegara:</p>
         <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>clkreboot</code></pre>
-        <p>Po restarcie zegara wykonaj ponownie synchronizację czasu:</p>
-        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>clock sync</code></pre>
 
-        <h2>7. Hasło gościa (Guest)</h2>
+        <h2>5. Konfiguracja zakresów regionalnych (Scopes)</h2>
         <p>
-            Zaleca się pozostawienie hasła gościa jako puste dla konsoli. Umożliwia to sąsiadom bezpieczną diagnostykę i weryfikację stanu stacji bez konieczności zdradzania haseł administracyjnych:
-        </p>
-        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set guest.password ""</code></pre>
-
-        <h2>8. Regiony i zakresy (Scopes)</h2>
-        <p>
-            Mechanizm Regional Scope służy do filtrowania i ograniczania ruchu radiowego w sieci, chroniąc Twój przemiennik przed zapchaniem przez niepotrzebne ramki z odległych województw. Dzięki tym regułom, Twój przemiennik pomoże w przekazywaniu lokalnego i krajowego ruchu sąsiadom, jednocześnie odrzucając zbędny szum.
+            Do filtrowania niepotrzebnego ruchu radiowego z odległych województw stosuje się system zakresów (Scopes).
+            Dodanie ich do stacji nie koliduje z dotychczasowym ruchem bez zakresu (unscoped), a odblokowuje poprawne powtarzanie wiadomości regionalnych.
         </p>
 
         <div class="alert-callout alert-callout-info">
-            <strong>💡 Brak problemów z dotychczasowymi wiadomościami (Wsteczna Kompatybilność):</strong><br>
-            Dodanie regionów do repeatera <strong>nie powoduje absolutnie żadnych problemów z przesyłaniem dotychczasowych/standardowych wiadomości</strong> (które nie mają przypisanego żadnego zakresu, tzw. unscoped). Przemiennik będzie je przekazywał dokładnie tak samo jak dotychczas. Jednakże, dodanie regionów odblokowuje niezwykle ważną funkcjonalność: <strong>daje możliwość odbierania i przesyłania dalej wiadomości z ustawionym konkretnym zakresem (scope)</strong>, co pozwala na precyzyjne trasowanie i separację ruchu regionalnego.
+            <strong>🌍 Zasada doboru regionów:</strong><br>
+            Dodawaj do konfiguracji <strong>wyłącznie regiony odpowiadające Twojemu województwu</strong> oraz regiony nadrzędne (jak <code>pl</code> czy <code>zachod</code>).
+            Pełną listę oraz taryfikator znajdziesz na stronie <a href="regiony.html" style="font-weight: bold; color: var(--accent-primary);">Regiony i Scopes</a>.
         </div>
 
-        <p>
-            <strong>Ustawianie domyślnego regionu repeatera (default.region):</strong><br>
-            Aby stacja w pełni korzystała z zalet sieci regionalnej, należy ustawić jej domyślny region za pomocą komendy:<br>
-            <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set default.region [nazwa_scope]</code></pre>
-            Na przykład, dla regionu zachodniego będzie to: <code>set default.region zachod</code>.<br><br>
-            <strong>Co to dokładnie robi i jak działa?</strong><br>
-            Gdy repeater ma ustawiony domyślny region (np. <code>zachod</code>), automatycznie <strong>przypisuje (binduje) ten scope do wszystkich pakietów, które tworzy samodzielnie</strong> (np. własne rozgłoszenia statusów, ramki telemetryczne) oraz do wszystkich pakietów, które <strong>otrzymał bez przypisanego zakresu (unscoped)</strong> jako "czyste" wiadomości od innych lokalnych węzłów. Dzięki temu zabiegowi, takie pakiety zostają natychmiast oznakowane właściwym zakresem i mogą być poprawnie przesyłane oraz filtrowane przez inne przemienniki w sieci regionalnej bez ryzyka wyjścia poza wyznaczony obszar.
-        </p>
-        <div class="alert-callout alert-callout-warn">
-            <strong>🌍 Zasada dobierania regionów:</strong><br>
-            Pamiętaj, aby do konfiguracji repeatera dodawać <strong>wyłącznie regiony odpowiadające Twojemu własnemu województwu</strong> (voivodeship) oraz regionom nadrzędnym (jak krajowy <code>pl</code> czy zbiorczy <code>zachod</code>). Wyjątkiem są sytuacje, gdy przemiennik znajduje się blisko granicy województw lub pełni rolę fizycznego mostu (bridge) przenoszącego ruch pomiędzy sąsiadującymi regionami.
-        </div>
-        <p>
-            Aby dodać dozwolone zakresy regionalne, ustawić domyślny region oraz zezwolić na ich przekazywanie dalej (floodowanie), wykonaj poniższe polecenia w CLI (klikając "kopiuj" przy każdej linii osobno):
-        </p>
+        <p>Poniżej znajdują się schematyczne przykłady komend CLI służące do wprowadzania i zarządzania regionami:</p>
         <div style="display: flex; flex-direction: column; gap: 8px; margin: 16px 0;">
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put europe</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put pl</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put zachod</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put pl-ds</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put pl-lb</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put wlkp</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put wro</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf europe</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf pl</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf zachod</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf pl-ds</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf pl-lb</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf wlkp</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf wro</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set default.region zachod</code></pre>
+            <div style="font-weight: bold; color: var(--text-main);"># Wprowadzenie regionu do pamięci:</div>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put [nazwa_regionu]</code></pre>
+
+            <div style="font-weight: bold; color: var(--text-main);"># Zezwolenie na floodowanie pakietów z tego zakresu:</div>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf [nazwa_regionu]</code></pre>
+
+            <div style="font-weight: bold; color: var(--text-main);"># Powiązanie własnych i unscoped pakietów z domyślnym regionem województwa:</div>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set default.region [nazwa_regionu]</code></pre>
+
+            <div style="font-weight: bold; color: var(--text-main);"># Zapisanie zmian w pamięci stacji i restart:</div>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region save</code></pre>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>reboot</code></pre>
         </div>
-        <p>
-            Pełną listę oraz taryfikator rekomendowanych kanałów i regionów w Polsce Zachodniej znajdziesz na dedykowanej podstronie: <a href="regiony.html">Regiony i Kanały</a>.
-        </p>
 
-        <h2>9. Włączenie przekazywania (Repeat Mode)</h2>
-        <p>
-            Aby repeater poprawnie przekazywał pakiety i wiadomości od innych użytkowników w sieci, musi mieć bezwzględnie włączoną funkcję **Repeat Mode**:
-        </p>
-        <pre><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set repeat.mode on</code></pre>
-
-        <h2>10. Dodatkowe ustawienia CLI</h2>
-        <p>
-            Poniżej opisano zaawansowane parametry optymalizacyjne, które można skonfigurować tylko za pomocą CLI. Warto je zawsze sprawdzić lub nawet ustawić dla pewności po każdej aktualizacji oprogramowania (ponieważ zmiana firmware czasem przywraca domyślne parametry urządzenia i trzeba je ustawić ponownie):
-        </p>
-
+        <h2>6. Optymalizacja i bezpieczeństwo (CLI)</h2>
         <ul>
             <li style="margin-bottom: 20px;">
-                <strong>Ograniczenie cyklu pracy nadajnika (duty cycle):</strong>
+                <strong>Repeat Mode (Tryb powtarzania):</strong> Włącza powtarzanie ruchu w sieci.
+                <pre style="margin: 8px 0; padding: 10px 16px; max-width: max-content;"><button class="btn-copy" style="top: 6px; right: 8px;" onclick="copyCode(this)">kopiuj</button><code>set repeat.mode on</code></pre>
+            </li>
+            <li style="margin-bottom: 20px;">
+                <strong>Duty Cycle:</strong> Ogranicza czas nadawania do 10% (zgodność z europejskimi normami).
                 <pre style="margin: 8px 0; padding: 10px 16px; max-width: max-content;"><button class="btn-copy" style="top: 6px; right: 8px;" onclick="copyCode(this)">kopiuj</button><code>set dutycycle 10</code></pre>
-                Ogranicza cykl pracy nadajnika (duty cycle) do 10%, co jest bezpośrednio zgodne z europejskimi normami prawnymi dla pasma LoRa ISM (869.4–869.65 MHz). Wymusza to odpowiednio długi czas ciszy radiowej po każdej retransmisji, dbając o wolne pasmo i legalność działania stacji.
             </li>
             <li style="margin-bottom: 20px;">
-                <strong>Wykrywanie pętli (loop detection):</strong>
+                <strong>Loop Detect (Wykrywanie pętli):</strong> Chroni przed lawinowym zapętlaniem pakietów.
                 <pre style="margin: 8px 0; padding: 10px 16px; max-width: max-content;"><button class="btn-copy" style="top: 6px; right: 8px;" onclick="copyCode(this)">kopiuj</button><code>set loop.detect minimal</code></pre>
-                Włącza podstawowe, niskonarzutowe wykrywanie pętli (loop detection). Chroni to sieć przed zjawiskiem zapętlania się tych samych pakietów między sąsiednimi przemiennikami, zapobiegając lawinowemu przeciążeniu eteru.
             </li>
             <li style="margin-bottom: 20px;">
-                <strong>Wielokrotne potwierdzenia odbioru (multiple ACKs):</strong>
+                <strong>Multiple ACKs:</strong> Poprawia stabilność potwierdzeń przy słabym sygnale.
                 <pre style="margin: 8px 0; padding: 10px 16px; max-width: max-content;"><button class="btn-copy" style="top: 6px; right: 8px;" onclick="copyCode(this)">kopiuj</button><code>set multi.acks 1</code></pre>
-                Aktywuje funkcję podwójnych/wielokrotnych potwierdzeń odbioru (multiple ACKs). Poprawia to niezawodność dostarczania danych, zwłaszcza przy niestabilnym, słabym połączeniu i w konfiguracjach wielodrożnych (multi-path), eliminując ryzyko zagubienia potwierdzeń.
             </li>
             <li style="margin-bottom: 20px;">
-                <strong>Zasięg przesyłanych advertów sieciowych:</strong>
-                <pre style="margin: 8px 0; padding: 10px 16px; max-width: max-content;"><button class="btn-copy" style="top: 6px; right: 8px;" onclick="copyCode(this)">kopiuj</button><code>set flood.max.advert 8</code></pre>
-                Ogranicza zasięg przesyłanych advertów sieciowych.
-            </li>
-            <li style="margin-bottom: 20px;">
-                <strong>Tryb generowania skrótów ścieżek (path-hash):</strong>
-                <pre style="margin: 8px 0; padding: 10px 16px; max-width: max-content;"><button class="btn-copy" style="top: 6px; right: 8px;" onclick="copyCode(this)">kopiuj</button><code>set path.hash.mode 2</code></pre>
-                Wymusza dwubajtowy tryb generowania skrótów ścieżek (path-hash), co znacząco zmniejsza ryzyko kolizji identyfikatorów tras w większych sieciach.
-            </li>
-            <li style="margin-bottom: 20px;">
-                <strong>Resetowanie automatycznej kontroli wzmocnienia (AGC):</strong>
-                <pre style="margin: 8px 0; padding: 10px 16px; max-width: max-content;"><button class="btn-copy" style="top: 6px; right: 8px;" onclick="copyCode(this)">kopiuj</button><code>set agc.reset.interval 500</code></pre>
-                Określa interwał (w milisekundach) resetowania automatycznej kontroli wzmocnienia (AGC) w układzie SX1262, zapobiegając zatykaniu odbiornika przez silne, bliskie sygnały.
-            </li>
-            <li style="margin-bottom: 20px;">
-                <strong>Limit hopów dla zakresów regionalnych:</strong>
-                <pre style="margin: 8px 0; padding: 10px 16px; max-width: max-content;"><button class="btn-copy" style="top: 6px; right: 8px;" onclick="copyCode(this)">kopiuj</button><code>set flood.max 64</code></pre>
-                Maksymalny dopuszczalny limit hopów (przeskoków) dla pakietów z przypisanym i dozwolonym zakresem regionalnym (np. zachod, pl-ds).
-            </li>
-            <li style="margin-bottom: 20px;">
-                <strong>Limit hopów dla ogólnego ruchu bez przypisanego zakresu (unscoped):</strong>
-                <pre style="margin: 8px 0; padding: 10px 16px; max-width: max-content;"><button class="btn-copy" style="top: 6px; right: 8px;" onclick="copyCode(this)">kopiuj</button><code>set flood.max.unscoped 8</code></pre>
-                Ograniczenie przesyłu dla ogólnego ruchu bez przypisanego zakresu (unscoped). Pakiety te mają mniejszy priorytet rozprzestrzeniania się.
+                <strong>Hasło Gościa:</strong> Pozostawienie pustego hasła konsoli pozwala sąsiadom na bezpieczny podgląd diagnostyczny.
+                <pre style="margin: 8px 0; padding: 10px 16px; max-width: max-content;"><button class="btn-copy" style="top: 6px; right: 8px;" onclick="copyCode(this)">kopiuj</button><code>set guest.password ""</code></pre>
             </li>
         </ul>
 
-        <div class="alert-callout alert-callout-info">
-            <strong>💡 Wskazówka dotycząca unscoped:</strong><br>
-            Wartość limitu <code>flood.max.unscoped</code> można w pełni dostosować do swoich potrzeb poprzez uważną obserwację przychodzących wiadomości. Im mniejsza wartość, tym mniejsze obciążenie generuje ruch dla całej lokalnej sieci. Najlepiej, aby wartość ta nie przekraczała <strong>8</strong>.
-        </div>
-
-        <p><strong>Czułość odbiornika (RxGain) oraz zasilanie:</strong></p>
-        <ul>
-            <li style="margin-bottom: 20px;">
-                <strong>Wzmocnienie odbioru sygnału radiowego (RxGain i FEM RxGain):</strong>
-                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0;">
-                    <pre style="margin: 0; padding: 10px 16px; max-width: max-content;"><button class="btn-copy" style="top: 6px; right: 8px;" onclick="copyCode(this)">kopiuj</button><code>set radio.rxgain on</code></pre>
-                    <pre style="margin: 0; padding: 10px 16px; max-width: max-content;"><button class="btn-copy" style="top: 6px; right: 8px;" onclick="copyCode(this)">kopiuj</button><code>set radio.rxgain off</code></pre>
-                    <pre style="margin: 0; padding: 10px 16px; max-width: max-content;"><button class="btn-copy" style="top: 6px; right: 8px;" onclick="copyCode(this)">kopiuj</button><code>set radio.fem.rxgain on</code></pre>
-                    <pre style="margin: 0; padding: 10px 16px; max-width: max-content;"><button class="btn-copy" style="top: 6px; right: 8px;" onclick="copyCode(this)">kopiuj</button><code>set radio.fem.rxgain off</code></pre>
-                </div>
-                Opcje te kontrolują wewnętrzne i zewnętrzne wzmocnienie odbioru sygnału radiowego (LNA / Front-End Module).
-                <br><em>Kiedy warto włączyć:</em> Gdy repeater jest zamontowany w miejscu o bardzo niskim poziomie szumów (czyste tło radiowe), aby wyłapywać skrajnie odległe i słabe sygnały.
-                <br><em>Kiedy wyłączyć (off):</em> Gdy urządzenie pracuje w pobliżu masztów GSM/BTS lub innych silnych źródeł zakłóceń – dodatkowe wzmocnienie może przesterować odbiornik.
-                <br><strong>Uwaga:</strong> Włączenie opcji rxgain zwiększa pobór prądu stacji, co należy uwzględnić przy zasilaniu bateryjnym!
-            </li>
-            <li style="margin-bottom: 20px;">
-                <strong>Oszczędzanie energii (Power Saving):</strong>
-                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0;">
-                    <pre style="margin: 0; padding: 10px 16px; max-width: max-content;"><button class="btn-copy" style="top: 6px; right: 8px;" onclick="copyCode(this)">kopiuj</button><code>powersaving on</code></pre>
-                    <pre style="margin: 0; padding: 10px 16px; max-width: max-content;"><button class="btn-copy" style="top: 6px; right: 8px;" onclick="copyCode(this)">kopiuj</button><code>powersaving off</code></pre>
-                </div>
-                Bardzo ważna funkcja dla posiadaczy repeaterów z zasilaniem bateryjnym/solarnym. Włączenie tej opcji usypia radio w momentach braku aktywności, co pozwala zaoszczędzić olbrzymie ilości energii.
-                <br>Dla głębokiej optymalizacji zużycia baterii niezwykle przydatny może okazać się również specjalny, zoptymalizowany firmware od IoTThinks EasySkyMesh:
-                <a href="https://github.com/IoTThinks/EasySkyMesh/releases" target="_blank" rel="noopener noreferrer">https://github.com/IoTThinks/EasySkyMesh/releases</a>.
-            </li>
-        </ul>
-
-        <p><strong>Ustawienia opóźnień nadawania (txdelay):</strong></p>
+        <h2>7. Opóźnienia nadawania (txdelay)</h2>
         <p>
-            Zróżnicowanie czasów opóźnienia nadawania (parametr <code>txdelay</code>) chroni sieć przed kolizjami radiowymi na tym samym obszarze (tzw. zjawisko ukrytego węzła).
-            Im wyżej położony i lepiej słyszalny jest dany przemiennik, tym dłużej powinien odczekać przed retransmisją, pozwalając na nadanie stacjom położonym niżej.
+            Strojenie parametru <code>txdelay</code> chroni sieć przed kolizjami radiowymi. Im wyżej położony i lepiej słyszalny przemiennik, tym dłużej powinien czekać na retransmisję.
         </p>
 
         <table>
             <thead>
                 <tr>
-                    <th>Profil wysokości / Sąsiedzi</th>
+                    <th>Profil wysokości</th>
                     <th>Opis zastosowania</th>
-                    <th>Zalecane Opóźnienia (CLI)</th>
+                    <th>Zalecane opóźnienia (CLI)</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td><strong>WYSOKI / MASZT</strong><br><small>Sąsiedzi: &gt;15 bezpośrednich</small></td>
-                    <td>Wysokie wieże, maszty kratownicowe, dachy wieżowców o bardzo dużym zasięgu.</td>
+                    <td><strong>WYSOKI / MASZT</strong><br><small>&gt;15 sąsiadów</small></td>
+                    <td>Wysokie wieże, dachy wieżowców.</td>
                     <td>
                         <div style="display: flex; flex-direction: column; gap: 6px;">
                             <pre style="margin: 0; padding: 8px;"><button class="btn-copy" style="top: 4px; right: 6px; padding: 2px 6px; font-size: 0.7rem;" onclick="copyCode(this)">kopiuj</button><code>set txdelay 1.5</code></pre>
@@ -500,8 +381,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><strong>DACH / ROOFTOP</strong><br><small>Sąsiedzi: 5 do 15</small></td>
-                    <td>Klasyczny montaż anteny na dachu domu jednorodzinnego lub niskiego bloku.</td>
+                    <td><strong>DACH / ROOFTOP</strong><br><small>5 - 15 sąsiadów</small></td>
+                    <td>Antena na dachu domu jednorodzinnego.</td>
                     <td>
                         <div style="display: flex; flex-direction: column; gap: 6px;">
                             <pre style="margin: 0; padding: 8px;"><button class="btn-copy" style="top: 4px; right: 6px; padding: 2px 6px; font-size: 0.7rem;" onclick="copyCode(this)">kopiuj</button><code>set txdelay 0.8</code></pre>
@@ -511,8 +392,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><strong>DOM / NISKI</strong><br><small>Sąsiedzi: &lt;5 bezpośrednich</small></td>
-                    <td>Węzeł domowy, antena na parapecie, balkonie lub wewnątrz pomieszczeń.</td>
+                    <td><strong>DOM / NISKI</strong><br><small>&lt;5 sąsiadów</small></td>
+                    <td>Parapet, balkon, wewnątrz mieszkań.</td>
                     <td>
                         <div style="display: flex; flex-direction: column; gap: 6px;">
                             <pre style="margin: 0; padding: 8px;"><button class="btn-copy" style="top: 4px; right: 6px; padding: 2px 6px; font-size: 0.7rem;" onclick="copyCode(this)">kopiuj</button><code>set txdelay 0.3</code></pre>
@@ -524,60 +405,13 @@
             </tbody>
         </table>
 
-        <h2>11. Podsumowanie: Kompletna lista domyślnych komend CLI</h2>
-        <p>
-            Poniżej zebraliśmy wszystkie rekomendowane i standardowe komendy konfiguracji repeatera na Zachodzie. Ze względu na wygodę i kontrolę poprawności, <strong>każdą linię należy kopiować i wysyłać do konsoli osobno</strong>. Pamiętaj, aby po wszystkim zrestartować urządzenie:
-        </p>
-
+        <h2>8. Pozostałe komendy CLI</h2>
         <div style="display: flex; flex-direction: column; gap: 8px; margin: 16px 0;">
-            <div style="font-weight: bold; margin-top: 8px; color: var(--text-main);"># 1. Tożsamość i kontakt (wprowadź swój własny nick)</div>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set owner.info "TWÓJ_NICK_LUB_ZNAK"</code></pre>
-
-            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);"># 2. Czasy rozgłoszeń (adverty)</div>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set advert.interval 240</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set flood.advert.interval 23</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set flood.max.advert 8</code></pre>
-
-            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);"># 3. Synchronizacja zegara</div>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>clock sync</code></pre>
-
-            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);"># 4. Hasło gościa (puste)</div>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set guest.password ""</code></pre>
-
-            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);"># 5. Tryb przekazywania (Repeat Mode)</div>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set repeat.mode on</code></pre>
-
-            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);"># 6. Optymalizacja routingu i parametrów LoRa, pętli oraz duty cycle</div>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set dutycycle 10</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set loop.detect minimal</code></pre>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set path.hash.mode 2</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set multi.acks 1</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set agc.reset.interval 500</code></pre>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set flood.max 64</code></pre>
             <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set flood.max.unscoped 8</code></pre>
-
-            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);"># 7. Konfiguracja zakresów regionalnych (Scopes)</div>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put europe</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put pl</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put zachod</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put pl-ds</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put pl-lb</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put wlkp</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region put wro</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf europe</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf pl</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf zachod</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf pl-ds</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf pl-lb</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf wlkp</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region allowf wro</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>set default.region zachod</code></pre>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>region save</code></pre>
-
-            <div style="font-weight: bold; margin-top: 12px; color: var(--text-main);"># 8. Na koniec zrestartuj urządzenie</div>
-            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>reboot</code></pre>
+            <pre style="margin: 0;"><button class="btn-copy" onclick="copyCode(this)">kopiuj</button><code>powersaving on</code></pre>
         </div>
-
     </div>
 
     <footer>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Kanały w Aplikacji – Konfiguracja Scopes</title>
+    <style>
+        :root {
+            --bg-page: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --border: #e2e8f0;
+            --border-hover: #cbd5e1;
+            --accent-primary: #1e40af;
+            --accent-primary-hover: #1d4ed8;
+            --accent-primary-glow: rgba(30, 64, 175, 0.08);
+            --bg-success: #f0fdf4;
+            --border-success: #dcfce7;
+            --accent-success: #15803d;
+            --bg-warn: #fff7ed;
+            --border-warn: #ffedd5;
+            --accent-warn: #c2410c;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-page: #090d16;
+                --bg-card: #111827;
+                --text-main: #f3f4f6;
+                --text-muted: #9ca3af;
+                --border: #1f2937;
+                --border-hover: #374151;
+                --accent-primary: #3b82f6;
+                --accent-primary-hover: #60a5fa;
+                --accent-primary-glow: rgba(59, 130, 246, 0.15);
+                --bg-success: rgba(34, 197, 94, 0.08);
+                --border-success: rgba(34, 197, 94, 0.2);
+                --accent-success: #22c55e;
+                --bg-warn: rgba(249, 115, 22, 0.08);
+                --border-warn: rgba(249, 115, 22, 0.2);
+                --accent-warn: #f97316;
+            }
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 32px 24px;
+            width: 100%;
+        }
+
+        .nav-back {
+            display: inline-block;
+            margin-bottom: 24px;
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .nav-back:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            margin: 0 0 8px 0;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+
+        h2 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            margin: 32px 0 16px 0;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: var(--bg-page);
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        tr:hover {
+            background-color: var(--bg-page);
+        }
+
+        ol, ul {
+            padding-left: 20px;
+            margin-bottom: 24px;
+            color: var(--text-muted);
+        }
+
+        li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        li strong {
+            color: var(--text-main);
+        }
+
+        .alert-callout {
+            border-radius: 12px;
+            padding: 16px;
+            margin: 24px 0;
+            border: 1px solid transparent;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .alert-callout-info {
+            background-color: var(--bg-success);
+            border-color: var(--border-success);
+            color: var(--text-muted);
+        }
+
+        .alert-callout-info strong {
+            color: var(--accent-success);
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 24px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="index.html" class="nav-back">← Powrót do strony głównej</a>
+
+        <h1>Zalecane Kanały</h1>
+        <div class="subtitle">Zestawienie rekomendowanych kanałów w aplikacji Companion oraz powiązanych z nimi zakresów terytorialnych (Scopes).</div>
+
+        <h2>Tabela Kanałów i Scopes dla Polski Zachodniej</h2>
+        <p>Poniższa tabela przedstawia standardowe kanały, które należy skonfigurować w aplikacji klienckiej Companion wraz z odpowiadającymi im parametrami regionalnego zakresu (Scope):</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Kanał w Companion</th>
+                    <th>Parametr Scope</th>
+                    <th>Zasięg terytorialny i przeznaczenie</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>#europe</strong></td>
+                    <td><code>europe</code></td>
+                    <td>Szeroki ruch ogólnoeuropejski.</td>
+                </tr>
+                <tr>
+                    <td><strong>#polska</strong></td>
+                    <td><code>pl</code></td>
+                    <td>Globalny ruch krajowy. Powtarzany przez wszystkie repeatery w Polsce.</td>
+                </tr>
+                <tr>
+                    <td><strong>#zachod</strong></td>
+                    <td><code>zachod</code></td>
+                    <td>Ruch zintegrowany dla Dolnego Śląska, Lubuskiego i Wielkopolski.</td>
+                </tr>
+                <tr>
+                    <td><strong>#dolnoslaskie</strong></td>
+                    <td><code>pl-ds</code></td>
+                    <td>Ruch wewnątrz województwa Dolnośląskiego.</td>
+                </tr>
+                <tr>
+                    <td><strong>#ds-test</strong></td>
+                    <td><code>pl-ds</code></td>
+                    <td>Dodatkowy kanał testowo-techniczny dla województwa Dolnośląskiego.</td>
+                </tr>
+                <tr>
+                    <td><strong>#lubuskie</strong></td>
+                    <td><code>pl-lb</code></td>
+                    <td>Ruch wewnątrz województwa Lubuskiego.</td>
+                </tr>
+                <tr>
+                    <td><strong>#wlkp</strong></td>
+                    <td><code>wlkp</code></td>
+                    <td>Ruch wewnątrz województwa Wielkopolskiego.</td>
+                </tr>
+                <tr>
+                    <td><strong>#wroclaw</strong></td>
+                    <td><code>wro</code></td>
+                    <td>Ruch lokalny aglomeracji wrocławskiej. Całkowicie ignorowany poza regionem.</td>
+                </tr>
+                <tr>
+                    <td><strong>#wroc-tech</strong></td>
+                    <td><code>wro</code></td>
+                    <td>Kanał techniczno-dyskusyjny aglomeracji wrocławskiej.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="alert-callout alert-callout-info">
+            <strong>💡 Wskazówka konfiguracji w Companion:</strong><br>
+            Wpisując nazwę kanału (np. <code>#zachod</code>), upewnij się, że w polu <strong>Scope</strong> (Zakres) wpisujesz dokładnie przypisaną mu wartość (np. <code>zachod</code>). Pakiety wysyłane z tak zdefiniowanym parametrem będą przesyłane wyłącznie przez przemienniki, które obsługują dany region, co chroni resztę sieci przed zapchaniem.
+        </div>
+
+        <p>
+            Chcesz wiedzieć, jak te regiony i hierarchia terytorialna są zorganizowane u podstaw, oraz jak skonfigurować swój własny repeater?
+            Przejdź do strony <a href="regiony.html" style="color: var(--accent-primary); font-weight: 700;">Regiony i Scopes</a>.
+        </p>
+    </div>
+
+    <footer>
+        <p>© 2026 Społeczność MeshCore Zachód.</p>
+    </footer>
+</body>
+</html>
