@@ -390,7 +390,10 @@
                 <div class="node-desc">Najniższy stopień, dedykowany konkretnym aglomeracjom jak Wrocław (wro) Poznań (poz) a także innych miast i regionów. Pozwala na swobodną, gęstą komunikację miejską bez obciążania stacji w regionach nadrzędnych.</div>
             </div>
         </div>
-
+        <div class="alert-callout alert-callout-warn">
+            <strong>🌍 Ważne zalecenie terytorialne:</strong><br>
+            Zaleca się dodawanie do konfiguracji repeatera wyłącznie regionów, które bezpośrednio odpowiadają Twojej lokalizacji (województwo, miasto) oraz regiony nadrzędne (takie jak <code>pl</code> czy <code>zachod</code>). Inne regiony sąsiednich województw należy dodawać tylko wtedy, gdy stacja znajduje się blisko granicy administracyjnej lub pełni rolę przekaźnika dla tych regionów.
+        </div>
         <h2>Dodanie regionów do konfiguracji repeatera</h2>
         <p>
             Aby Twój repeater poprawnie przekazywał pakiety z powyższych zakresów regionalnych, musisz zdefiniować dozwolone regiony w jego pamięci.
@@ -422,11 +425,6 @@
             <strong>Co robi ta funkcja?</strong><br>
             Wprowadzenie regionu domyślnego powoduje, że wszystkie pakiety generowane bezpośrednio przez samo urządzenie (np. Adverty) zostaną oznaczone scopem. Najlepiej ustawić większy region np. pl lub zachod.
         </p>
-
-        <div class="alert-callout alert-callout-warn">
-            <strong>🌍 Ważne zalecenie terytorialne:</strong><br>
-            Zaleca się dodawanie do konfiguracji repeatera wyłącznie regionów, które bezpośrednio odpowiadają Twojemu własnemu województwu oraz regiony nadrzędne (takie jak <code>pl</code> czy <code>zachod</code>). Inne regiony sąsiednich województw należy dodawać tylko wtedy, gdy stacja znajduje się blisko granicy administracyjnej lub pełni rolę przekaźnika dla tych regionów.
-        </div>
 
         <h3>Pełna lista komend które możesz skopiować do wiersza polecenia CLI w Repeaterze:</h3>
         <p>
