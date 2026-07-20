@@ -261,6 +261,66 @@
             color: var(--text-muted);
             margin-top: auto;
         }
+
+        /* Styl dla odtwarzacza wideo (smartfona) */
+        .video-section {
+            margin: 32px 0;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .video-section h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .phone-mockup-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 24px 0 12px 0;
+        }
+
+        .phone-mockup {
+            width: 100%;
+            max-width: 280px;
+            aspect-ratio: 9 / 16;
+            background-color: #000000;
+            border: 12px solid #1e293b;
+            border-radius: 36px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Głośnik/notch na górze telefonu */
+        .phone-speaker {
+            width: 60px;
+            height: 12px;
+            background-color: #1e293b;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 15;
+        }
+
+        .phone-mockup video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 24px;
+        }
     </style>
 </head>
 <body>
@@ -335,6 +395,21 @@
         <p>
             Aby Twój repeater poprawnie przekazywał pakiety z powyższych zakresów regionalnych, musisz zdefiniować dozwolone regiony w jego pamięci.
         </p>
+
+        <!-- Wideo instrukcja smartfona -->
+        <div class="video-section">
+            <h3>Instrukcja wideo (aplikacja mobilna)</h3>
+            <p>Poniższy film instruktażowy pokazuje krok po kroku, jak szybko i wygodnie skonfigurować regiony w repeaterze z poziomu aplikacji na smartfonie:</p>
+            <div class="phone-mockup-wrapper">
+                <div class="phone-mockup">
+                    <div class="phone-speaker"></div>
+                    <video controls preload="metadata" playsinline>
+                        <source src="region.mp4" type="video/mp4">
+                        Twoja przeglądarka nie obsługuje odtwarzacza wideo.
+                    </video>
+                </div>
+            </div>
+        </div>
 
         <div class="alert-callout alert-callout-info">
             <strong>💡 Wsteczna Kompatybilność:</strong><br>
